@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mástoras Blog - Business Clarity &amp; Storytelling</title>
+    <description>Insights on business strategy, brand storytelling, grant writing, and consultancy for Northern Irish businesses and community organizations.</description>
+    <link>https://mastoras.netlify.app/blog</link>
+    <atom:link href="https://mastoras.netlify.app/blog/rss.xml" rel="self" type="application/rss+xml"/>
+    <language>en-gb</language>
+    <lastBuildDate>Wed, 26 Mar 2026 12:00:00 GMT</lastBuildDate>
+    <generator>Mástoras Consultancy</generator>
+
+    <!-- Future blog posts will go here -->
+    <item>
+      <title>Welcome to Mástoras - Structure → Story → Soul</title>
+      <description>How we help Northern Irish businesses cut through the noise with honest advice and compelling storytelling.</description>
+      <link>https://mastoras.netlify.app/blog/welcome-to-mastoras</link>
+      <guid>https://mastoras.netlify.app/blog/welcome-to-mastoras</guid>
+      <pubDate>Wed, 26 Mar 2026 12:00:00 GMT</pubDate>
+      <author>hello.mastoras@gmail.com (Gary Nicholl)</author>
+      <category>Business Strategy</category>
+      <category>Brand Storytelling</category>
+    </item>
+  </channel>
+</rss>
