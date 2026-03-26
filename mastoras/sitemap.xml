@@ -54,19 +54,27 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Blog/Resources (Future) -->
+  <!-- Blog Pages -->
   <url>
     <loc>https://mastoras.netlify.app/blog</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://mastoras.netlify.app/resources</loc>
+    <loc>https://mastoras.netlify.app/blog/structure-story-soul</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
+    <news:news>
+      <news:publication>
+        <news:name>Mástoras Blog</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-03-26T10:00:00Z</news:publication_date>
+      <news:title>Structure → Story → Soul: The Mástoras Approach to Business Clarity</news:title>
+    </news:news>
   </url>
 
 </urlset>
