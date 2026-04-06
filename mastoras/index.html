@@ -163,24 +163,8 @@
       padding: 16px 0;
     }
 
-    .wordmark { text-decoration: none; line-height: 1.25; }
-    .wm-name {
-      display: block;
-      font-family: Georgia, serif;
-      font-weight: bold;
-      font-size: 1.3em;
-      color: var(--slate);
-      letter-spacing: 0.1em;
-    }
-    .wm-sub {
-      display: block;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.62em;
-      color: var(--brass);
-      letter-spacing: 0.14em;
-      font-variant: small-caps;
-      text-transform: uppercase;
-    }
+    .wordmark { text-decoration: none; display: flex; align-items: center; }
+    .wordmark img { height: 44px; width: auto; display: block; }
 
     /* Desktop nav */
     .nav-links { display: flex; align-items: center; gap: 28px; }
@@ -1001,8 +985,7 @@
   <div class="wrap">
     <div class="header-inner">
       <a href="#hero" class="wordmark" aria-label="Mástoras home">
-        <span class="wm-name">MÁSTORAS</span>
-        <span class="wm-sub">Clarity &amp; Story Consultancy</span>
+        <img src="mastoras-logo.png" alt="Mástoras" height="44">
       </a>
       <nav class="nav-links" aria-label="Main navigation">
         <a href="#entry-points">Services</a>
@@ -1049,10 +1032,6 @@
       <div class="hero-stat">
         <strong>25 years in construction</strong>
         Now building clarity
-      </div>
-      <div class="hero-stat">
-        <strong>Pilot clients in progress</strong>
-        Select availability
       </div>
     </div>
   </div>
