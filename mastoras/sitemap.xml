@@ -6,12 +6,12 @@
 
   <!-- Main Homepage -->
   <url>
-    <loc>https://mastoras.netlify.app/</loc>
+    <loc>https://mastoras.uk/</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://mastoras.netlify.app/mastoras-logo.png</image:loc>
+      <image:loc>https://mastoras.uk/mastoras-logo.png</image:loc>
       <image:title>Mástoras — Clarity &amp; Story Consultancy Logo</image:title>
       <image:caption>Professional business consultancy logo for Northern Ireland</image:caption>
     </image:image>
@@ -19,21 +19,21 @@
 
   <!-- Service Pages (Future) -->
   <url>
-    <loc>https://mastoras.netlify.app/services/clarity-check</loc>
+    <loc>https://mastoras.uk/services/clarity-check</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://mastoras.netlify.app/services/story-reframe</loc>
+    <loc>https://mastoras.uk/services/story-reframe</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://mastoras.netlify.app/services/grant-reframe</loc>
+    <loc>https://mastoras.uk/services/grant-reframe</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -41,14 +41,14 @@
 
   <!-- About & Contact -->
   <url>
-    <loc>https://mastoras.netlify.app/about</loc>
+    <loc>https://mastoras.uk/about</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://mastoras.netlify.app/contact</loc>
+    <loc>https://mastoras.uk/contact</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -56,14 +56,14 @@
 
   <!-- Blog Pages -->
   <url>
-    <loc>https://mastoras.netlify.app/blog</loc>
+    <loc>https://mastoras.uk/blog</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://mastoras.netlify.app/blog/structure-story-soul</loc>
+    <loc>https://mastoras.uk/blog/structure-story-soul</loc>
     <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

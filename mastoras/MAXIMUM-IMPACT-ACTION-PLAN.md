@@ -5,20 +5,20 @@
 ### ✅ Phase 1: Technical Foundation (Days 1-2)
 
 #### 1.1 Google Search Console Setup
-- [ ] Go to [search.google.com/search-console](https://search.google.com/search-console)
-- [ ] Add property: `https://mastoras.netlify.app`
-- [ ] Verify with HTML meta tag (we have it in index.html)
-- [ ] Submit sitemap: `sitemap.xml`
-- [ ] Request indexing for homepage
-- [ ] Request indexing for blog posts
+- [x] Go to [search.google.com/search-console](https://search.google.com/search-console)
+- [x] Add property: `https://mastoras.netlify.app`
+- [x] Verify with HTML meta tag (we have it in index.html)
+- [x] Submit sitemap: `sitemap.xml`
+- [ ] Request indexing for homepage — waiting for data to process (Google advised ~3-7 days)
+- [ ] Request indexing for blog posts — same, waiting
 - [ ] Monitor indexing status daily
 
 #### 1.2 Bing Webmaster Tools Setup
-- [ ] Go to [bing.com/webmasters](https://www.bing.com/webmasters)
-- [ ] Add site: `https://mastoras.netlify.app`
-- [ ] Verify with HTML meta tag
-- [ ] Submit sitemap
-- [ ] Set geographic target to United Kingdom
+- [x] Go to [bing.com/webmasters](https://www.bing.com/webmasters)
+- [x] Add site: `https://mastoras.netlify.app`
+- [x] Verify (imported from GSC)
+- [x] Submit sitemap
+- [x] Set geographic target to United Kingdom
 - [ ] Monitor crawl status
 
 #### 1.3 Apple Maps Connect Setup
@@ -33,17 +33,18 @@
 
 #### 2.1 Google My Business Setup
 **CRITICAL - Do First!**
-- [ ] Go to [business.google.com](https://www.google.com/business/)
-- [ ] Create or claim listing for Mástoras
-- [ ] Address: [Your physical address in Causeway Coast and Glens]
-- [ ] Phone: [Your business phone number]
-- [ ] Website: `https://mastoras.netlify.app`
-- [ ] Business category: Business Consultant
-- [ ] Add 5+ high-quality photos
-- [ ] Write compelling business description (150-250 characters)
-- [ ] Add service areas (Northern Ireland, UK)
-- [ ] Set opening hours (Mon-Fri 9AM-5PM)
-- [ ] Add business posts with links to blog
+- [x] Go to [business.google.com](https://www.google.com/business/)
+- [x] Create listing for Mástoras
+- [x] Service area: Causeway Coast and Glens (hidden address)
+- [x] Phone: 07842 115153
+- [x] Website: `https://mastoras.netlify.app`
+- [x] Business category: Business Consultant
+- [x] Business description added
+- [x] Logo uploaded as profile photo
+- [ ] Verification pending — Google processing (up to 5 days) ⏳ submitted 2026-03-26
+- [ ] Once verified: add 5+ high-quality photos
+- [ ] Once verified: set opening hours (Mon-Fri 9AM-5PM)
+- [ ] Once verified: add business posts with links to blog
 
 #### 2.2 Bing Places for Business
 - [ ] Go to [bingplaces.com](https://www.bingplaces.com/)
@@ -353,8 +354,8 @@ Monthly Content Themes:
 ## ACCOUNTABILITY CHECKLIST
 
 ### Week 1 Must-Haves
-- [ ] Google Search Console configured
-- [ ] Bing Webmaster Tools configured
+- [x] Google Search Console configured ✅ 2026-03-26
+- [x] Bing Webmaster Tools configured ✅ 2026-03-26
 - [ ] Google My Business verified
 - [ ] LinkedIn company page created
 - [ ] Twitter/Facebook/Instagram accounts optimized

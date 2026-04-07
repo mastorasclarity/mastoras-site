@@ -54,8 +54,7 @@ User-agent: SemrushBot
 Disallow: /
 
 # Sitemaps
-Sitemap: https://mastoras.netlify.app/sitemap.xml
-Sitemap: https://mastoras.netlify.app/sitemap-index.xml
+Sitemap: https://mastoras.uk/sitemap.xml
 
 # Host directive for AI understanding
-Host: https://mastoras.netlify.app
+Host: https://mastoras.uk
