@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZ15XT7EEJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZZ15XT7EEJ');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mástoras — Clarity &amp; Story Consultancy | Northern Ireland</title>
@@ -1350,12 +1358,12 @@
         </div>
       </div>
 
-      <form class="contact-form" action="https://formsubmit.co/hello.mastoras@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="New enquiry from Mástoras website">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
-        <input type="text" name="_honey" style="display:none">
-        <input type="hidden" name="_next" value="https://mastoras.netlify.app/#contact">
+      <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="7f041ae4-23cd-4020-9b0f-a3ed0443ba17">
+        <input type="hidden" name="subject" value="New enquiry from Mástoras website">
+        <input type="hidden" name="from_name" value="Mástoras Website">
+        <input type="hidden" name="redirect" value="https://mastoras.netlify.app/#contact">
+        <input type="checkbox" name="botcheck" style="display:none">
 
         <div class="form-group">
           <label for="name">Your name</label>
