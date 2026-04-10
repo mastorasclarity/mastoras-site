@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mastoras.netlify.app/sitemap.xml
+Sitemap: https://mastoras.uk/sitemap.xml
+Host: https://mastoras.uk
