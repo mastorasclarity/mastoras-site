@@ -6,4 +6,25 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <url>
+    <loc>https://mastoras.uk/blog</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://mastoras.uk/blog/structure-story-soul</loc>
+    <lastmod>2026-03-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://mastoras.uk/blog/grant-writing-northern-ireland</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
