@@ -6,26 +6,29 @@
 
 #### 1.1 Google Search Console Setup
 - [x] Go to [search.google.com/search-console](https://search.google.com/search-console)
-- [x] Add property: `https://mastoras.netlify.app`
-- [x] Verify with HTML meta tag (we have it in index.html)
+- [x] Add property: `https://mastoras.uk`
+- [x] Verify with HTML meta tag (in root index.html)
 - [x] Submit sitemap: `sitemap.xml`
-- [ ] Request indexing for homepage — waiting for data to process (Google advised ~3-7 days)
-- [ ] Request indexing for blog posts — same, waiting
-- [ ] Monitor indexing status daily
+- [x] Request indexing for homepage ✅ 2026-04-10
+- [x] Duplicate canonical warning — fix validated ✅ 2026-04-10
+- [x] Request indexing for blog posts ✅ 2026-04-12
+  - mastoras.uk/blog
+  - mastoras.uk/blog/structure-story-soul
+  - mastoras.uk/blog/grant-writing-northern-ireland
+  - mastoras.uk/blog/pre-build-assessment-case-study
+- [ ] Monitor indexing status weekly
 
 #### 1.2 Bing Webmaster Tools Setup
 - [x] Go to [bing.com/webmasters](https://www.bing.com/webmasters)
-- [x] Add site: `https://mastoras.netlify.app`
+- [x] Add site: `https://mastoras.uk`
 - [x] Verify (imported from GSC)
 - [x] Submit sitemap
 - [x] Set geographic target to United Kingdom
+- [x] Submit all blog post URLs ✅ 2026-04-12 — accepted (SEO/title length errors fixed same day)
 - [ ] Monitor crawl status
 
 #### 1.3 Apple Maps Connect Setup
-- [ ] Go to [mapsconnect.apple.com](https://mapsconnect.apple.com/)
-- [ ] Add business location
-- [ ] Verify ownership
-- [ ] Add photos and service descriptions
+- [x] Skipped — no Apple ID, audience primarily on Android/Google
 
 ---
 
@@ -37,79 +40,81 @@
 - [x] Create listing for Mástoras
 - [x] Service area: Causeway Coast and Glens (hidden address)
 - [x] Phone: 07842 115153
-- [x] Website: `https://mastoras.netlify.app`
+- [x] Website: `https://mastoras.uk`
 - [x] Business category: Business Consultant
 - [x] Business description added
 - [x] Logo uploaded as profile photo
-- [ ] Verification pending — Google processing (up to 5 days) ⏳ submitted 2026-03-26
-- [ ] Once verified: add 5+ high-quality photos
-- [ ] Once verified: set opening hours (Mon-Fri 9AM-5PM)
-- [ ] Once verified: add business posts with links to blog
+- [x] Verified ✅ 2026-04-12
+- [ ] Add 5+ high-quality photos
+- [ ] Set opening hours (Mon-Fri 9AM-5PM)
+- [ ] Add business posts with links to blog
 
-#### 2.2 Bing Places for Business
-- [ ] Go to [bingplaces.com](https://www.bingplaces.com/)
-- [ ] Add business listing (same info as GMB)
-- [ ] Link to Google My Business for easy sync
-- [ ] Add photos and videos
-- [ ] Enable customer messaging
+#### 2.2 Bing Places for Business ✅ 2026-04-12
+- [x] Synced from Google My Business
+- [x] Verified
+- [x] Website: mastoras.uk confirmed
+- [x] Service area: Causeway Coast and Glens
+- [x] Category: Business Consultant
+- [x] Phone: 07842 115153
+- [x] URL submitted in Bing Webmaster Tools
+
+#### 2.3 Domain & URL Fixes ✅ 2026-04-10
+- [x] New site live at mastoras.uk (Cloudflare)
+- [x] All URLs updated from mastoras.netlify.app → mastoras.uk
+- [x] Canonical tag added to new site
+- [x] GSC verification tag added to new site
+- [x] GA4 (G-ZZ15XT7EEJ) live and confirmed on mastoras.uk
+- [x] robots.txt fixed and confirmed at mastoras.uk/robots.txt
+- [x] GMB website link updated to mastoras.uk
+- [x] Bing Webmaster Tools updated to mastoras.uk
+- [x] mastoras.co.uk accidental zone deleted from Cloudflare
 
 ---
 
 ### ✅ Phase 3: Social Media Foundation (Days 4-7)
 
-#### 3.1 LinkedIn Company Page
-**HIGHEST PRIORITY**
-- [ ] Go to [linkedin.com/company/new](https://www.linkedin.com/company/new/)
-- [ ] Create company page: "Mástoras"
-- [ ] Add profile photo (logo)
-- [ ] Add cover photo (professional branding)
-- [ ] Add company description:
-  ```
-  Clarity & Story Consultancy for Northern Irish Businesses
-  
-  We help founders, trades, and community organisations cut through the noise with:
-  • Honest feasibility checks
-  • Compelling brand stories
-  • Strategic grant writing
-  • Business clarity consulting
-  
-  Structure → Story → Soul
-  ```
-- [ ] Add website: `https://mastoras.netlify.app`
-- [ ] Add industry: Management Consulting
-- [ ] Add company size: 1-10 employees
-- [ ] Set headquarters: Causeway Coast and Glens, Northern Ireland
-- [ ] Verify page
-- [ ] Add first posts immediately
+#### 3.1 LinkedIn Personal Profile ✅ 2026-04-10
+- [x] Profile URL: linkedin.com/in/garry-nicholl-8851863a8/
+- [x] Headline: Mástoras | Clarity & story for NI trades and community projects
+- [x] About section complete
+- [x] Mástoras experience entry — start date Feb 2025, full description added
+- [x] Featured section — mastoras.uk pinned
+- [x] Services section added
+- [x] Contact info — website updated to mastoras.uk
+- [x] 3 posts written and ready to publish (graphics made in Canva)
+- [x] Post 1 published (teal graphic — laundry client story)
+- [ ] Post 2 — publish 3-4 days after Post 1
+- [ ] Post 3 — publish 3-4 days after Post 2
+- [ ] Build connections to 10+ (currently 2) to unlock company page
+
+#### 3.1b LinkedIn Company Page — BLOCKED pending connections
+- [ ] Need ~10 connections before LinkedIn allows company page creation
+- [ ] Once unlocked: create page, add logo, description, link to mastoras.uk
 
 #### 3.2 Twitter/X Business Account
-- [ ] Create business account if not already done
-- [ ] Username: @mastoras_ni (or available variant)
-- [ ] Bio: "Clarity & Story Consultancy | Northern Ireland | Structure → Story → Soul"
-- [ ] Add website link
-- [ ] Add location: Northern Ireland
-- [ ] Add profile picture (logo)
-- [ ] Add header image (professional business imagery)
-- [ ] Link to website in profile
+- [ ] Not yet created — low priority vs Instagram for now
 
-#### 3.3 Facebook Business Page
-- [ ] Go to [facebook.com/pages/create](https://www.facebook.com/pages/create/)
-- [ ] Create business page: "Mástoras Consultancy"
-- [ ] Category: Business Consultant
-- [ ] Add description
-- [ ] Add profile picture and cover photo
-- [ ] Add website link
-- [ ] Add business hours
-- [ ] Add contact information
+#### 3.3 Facebook Business Page ✅ 2026-04-10
+- [x] Page created: Mástoras (facebook.com/profile.php?id=61582851035565)
+- [x] Category: Business service
+- [x] Description added
+- [x] Logo as profile photo
+- [x] Cover photo updated (teal branded banner)
+- [x] Website: mastoras.uk
+- [x] Phone and email added
+- [x] 3 posts published
+- [x] Old netlify post deleted
+- [ ] Build followers — currently 204
 
-#### 3.4 Instagram Business Account
-- [ ] Create business account or convert personal account
-- [ ] Username: @mastoras.consultancy
-- [ ] Bio: "Clarity & Story Consultancy | Structure → Story → Soul"
-- [ ] Add professional photo
-- [ ] Add website link
-- [ ] Add contact button
-- [ ] Create first 5 posts/reels
+#### 3.4 Instagram Business Account ✅ 2026-04-12
+- [x] Create business account (Android phone)
+- [x] Username: @mastoras.consultancy
+- [x] Bio added
+- [x] Logo as profile photo
+- [x] Website: mastoras.uk
+- [x] Contact button added
+- [ ] Post first content (reuse LinkedIn Canva graphics)
+- [ ] Build followers
 
 ---
 
@@ -118,17 +123,15 @@
 ### ✅ Phase 4: Content Publishing (Week 2-3)
 
 #### 4.1 Blog Publishing Schedule
-- [ ] Publish one blog post per week
-- [ ] Use Structure → Story → Soul article as template
-- [ ] Topics:
-  - [ ] Week 2: "Grant Writing for Northern Ireland Organizations"
-  - [ ] Week 3: "How to Pitch Your Business to Investors"
-  - [ ] Week 4: "Local Success: Causeway Coast Businesses That Triumphed"
-- [ ] Optimize each post with:
-  - [ ] AI-optimized title and meta descriptions
-  - [ ] Schema.org structured data
-  - [ ] Internal linking to other blog posts
-  - [ ] Call-to-action to book consultation
+- [x] Blog moved to mastoras.uk/blog/ (repo root) — clean URLs, linked from nav ✅ 2026-04-12
+- [x] Post 1: Structure → Story → Soul ✅ 2026-03-26
+- [x] Post 2: Why Most NI Grant Applications Fail ✅ 2026-04-12
+- [x] Post 3: Before You Sign the Lease (Pre-Build Assessment case study) ✅ 2026-04-12
+- [x] Blog index with Explore Topics (4 categories, all linked) ✅ 2026-04-12
+- [x] All posts: title <60 chars, meta description <155 chars (Bing compliant) ✅ 2026-04-12
+- [ ] Post 4: next topic TBD
+- [ ] Continue 1 post per week cadence
+- [ ] Share each post on LinkedIn, Facebook, Instagram after publishing
 
 #### 4.2 Content Distribution
 - [ ] Share blog posts on all social platforms
@@ -207,7 +210,7 @@
 - [ ] Apple Maps ✅ (already doing)
 
 **Week 3: Priority 2:**
-- [ ] NI Business Info - [nibusinessinfo.co.uk](https://www.nibusinessinfo.co.uk/)
+- [x] NI Business Info - advice/resource site only, cannot list a business there
 - [ ] Derry Chamber of Commerce - [derrychamber.com](https://www.derrychamber.com/)
 - [ ] Causeway Coast & Glens Council - [causewaycoastandglens.gov.uk](https://www.causewaycoastandglens.gov.uk/)
 
@@ -396,6 +399,6 @@ Monthly Content Themes:
 
 For detailed setup instructions for any tool, refer to the guides in your `/mastoras/analytics/` and `/mastoras/local-seo/` folders.
 
-**Current Status:** Ready for Week 1 implementation
-**Next Review Date:** 1 week from today
-**Target Completion:** 30-45 days for all immediate + short-term actions
+**Current Status:** Phase 1-4 complete. Active on LinkedIn, Facebook, Instagram. Blog live with 3 posts.
+**Last Updated:** 2026-04-12
+**Next Actions:** LinkedIn Post 2, Instagram first post, GMB photos/hours, Post 4 blog content
