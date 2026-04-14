@@ -304,7 +304,17 @@
     }
 
     /* ── HOW IT WORKS ── */
-    #how-it-works { background: var(--white); }
+    #how-it-works {
+      background: url('carrick-a-rede-turquoise.jpg') center/cover no-repeat;
+      position: relative;
+    }
+    #how-it-works::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(244, 244, 240, 0.92);
+    }
+    #how-it-works .wrap { position: relative; z-index: 1; }
 
     .steps { margin-top: 56px; margin-bottom: 48px; }
 
