@@ -303,6 +303,45 @@
       text-underline-offset: 3px;
     }
 
+    .svc-secondary {
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .svc-secondary-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    .svc-secondary-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .svc-secondary-list li {
+      font-size: 14.5px;
+      color: #555;
+      line-height: 1.65;
+      padding-left: 0;
+    }
+
+    .svc-secondary-list strong {
+      color: var(--navy);
+    }
+
+    .svc-secondary-price {
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 13.5px;
+    }
+
     /* ── HOW IT WORKS ── */
     #how-it-works {
       background: url('carrick-a-rede-turquoise.jpg') center/cover no-repeat;
@@ -628,27 +667,38 @@
       <div class="svc">
         <div class="svc-left">
           <p class="svc-name">Pre-Build Assessment</p>
-          <p class="svc-desc">Before you commit money or reputation to a new idea — stress-test it properly. Decision memo, route comparisons, clear go/no-go recommendation, and an exit strategy built in from day one.</p>
+          <p class="svc-desc">Before you commit money or reputation to a new idea — stress-test it properly. Decision memo, route comparisons, clear Proceed / Pause / Stop recommendation, and an exit strategy built in from day one. Three tiers depending on complexity.</p>
         </div>
         <span class="svc-price">Lite £300 · Std £450 · Plus £650</span>
       </div>
       <div class="svc">
         <div class="svc-left">
-          <p class="svc-name">Clarity Check</p>
-          <p class="svc-desc">One focused session to identify the single bottleneck creating the most friction — and a 30-day action plan to clear it. For businesses that are running but stuck.</p>
+          <p class="svc-name">Brand Story Sprint</p>
+          <p class="svc-desc">"We do good work, but struggle to explain it." One sprint to turn scattered ideas into a narrative you can actually use — brand summary, core messaging, and a Field Guide built for every sales conversation, pitch, or proposal you'll ever write.</p>
         </div>
-        <span class="svc-price">£195</span>
+        <span class="svc-price">£650</span>
       </div>
       <div class="svc">
         <div class="svc-left">
-          <p class="svc-name">Grant Reframe</p>
-          <p class="svc-desc">Turn a strong project into a funder-aligned narrative. Written from the funder's criteria backwards — not from what you want to say. Reusable language for future applications included.</p>
+          <p class="svc-name">Trades Business Tune-Up</p>
+          <p class="svc-desc">Specialist support for owner-operators in the trades. Pricing review, rate card, job scheduling workflow, and customer communications — sorted. Built by someone who has spent 25 years on sites, not in an office.</p>
         </div>
-        <span class="svc-price">£450</span>
+        <span class="svc-price">£250</span>
       </div>
     </div>
 
     <p class="services-foot">Need something different? <a href="mailto:hello@mastoras.uk">Get in touch</a> — most things can be scoped.</p>
+
+    <div class="svc-secondary">
+      <p class="svc-secondary-label">Also available</p>
+      <ul class="svc-secondary-list">
+        <li><strong>The First Fix</strong> <span class="svc-secondary-price">£195</span> — One session to find your single biggest bottleneck and clear it. 1-page diagnostic, 30-day action plan. For businesses that are running but stuck.</li>
+        <li><strong>Grant Reframe</strong> <span class="svc-secondary-price">£450</span> — A funder-aligned narrative for a specific project or application, written from the criteria backwards. Reusable language included.</li>
+        <li><strong>Funding Roadmap</strong> <span class="svc-secondary-price">£450</span> — A curated 12-month funding shortlist for community organisations — what to apply for, eligibility notes, deadlines, and a 30-day evidence plan.</li>
+        <li><strong>Impact &amp; Governance Pack</strong> <span class="svc-secondary-price">from £395</span> — Impact measurement framework, governance health check, and stakeholder narrative support for CICs, charities, and community projects.</li>
+      </ul>
+      <p class="services-foot" style="margin-top:16px;"><a href="#contact">Get in touch</a> to discuss any of these.</p>
+    </div>
   </div>
 </section>
 
@@ -789,8 +839,12 @@
           <select id="service" name="service">
             <option value="">Select a service (optional)</option>
             <option value="pre-build">Pre-Build Assessment</option>
-            <option value="clarity-check">Clarity Check</option>
+            <option value="brand-story">Brand Story Sprint</option>
+            <option value="trades-tuneup">Trades Business Tune-Up</option>
+            <option value="first-fix">The First Fix</option>
             <option value="grant-reframe">Grant Reframe</option>
+            <option value="funding-roadmap">Funding Roadmap</option>
+            <option value="impact-governance">Impact &amp; Governance Pack</option>
             <option value="not-sure">Not sure yet</option>
           </select>
         </div>
