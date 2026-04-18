@@ -36,18 +36,102 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
 
-  <!-- Schema.org -->
+  <!-- Schema.org — Organisation -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
+    "@id": "https://mastoras.uk/#organization",
     "name": "Mástoras",
     "description": "Clarity & Story Consultancy helping founders, trades, and community organisations turn unclear ideas into grounded decisions.",
     "url": "https://mastoras.uk",
     "email": "hello@mastoras.uk",
     "areaServed": { "@type": "Place", "name": "Northern Ireland" },
-    "founder": { "@type": "Person", "name": "Garry Nicholl" },
+    "founder": {
+      "@type": "Person",
+      "@id": "https://mastoras.uk/#garry-nicholl",
+      "name": "Garry Nicholl"
+    },
     "slogan": "Structure → Story → Soul"
+  }
+  </script>
+
+  <!-- Schema.org — Person -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "https://mastoras.uk/#garry-nicholl",
+    "name": "Garry Nicholl",
+    "jobTitle": "Clarity & Story Consultant",
+    "description": "Founder of Mástoras. 25 years in construction and project delivery. Helps founders, trades, and community organisations get clear before they build, pitch, or fund.",
+    "url": "https://mastoras.uk",
+    "email": "hello@mastoras.uk",
+    "worksFor": {
+      "@type": "Organization",
+      "@id": "https://mastoras.uk/#organization",
+      "name": "Mástoras"
+    },
+    "areaServed": { "@type": "Place", "name": "Northern Ireland" },
+    "knowsAbout": ["business clarity", "brand storytelling", "grant writing", "pre-build assessment", "construction and project delivery", "business strategy for tradespeople"]
+  }
+  </script>
+
+  <!-- Schema.org — FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do I need to be a registered business to work with Mástoras?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Most of the people I work with are either pre-launch or operating as sole traders. You don't need a formal structure — you need a clear one."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where is Mástoras based?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Causeway Coast, Northern Ireland. I work with clients across NI and beyond. Most work is done remotely, with in-person available for local clients who prefer it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does a project take?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The First Fix is a single session — usually 90 minutes. A Pre-Build Assessment takes 1–2 weeks depending on complexity. A Grant Reframe typically takes 5–7 working days once we've had the initial conversation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What if I don't know which service I need?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "That's what the 20-minute call is for. Tell me what you're working on and I'll tell you what I think you actually need — which is sometimes not what you came in expecting."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the 20-minute call really free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. No obligation, no follow-up pitch if it's not a fit. I'll give you something useful in the conversation regardless."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Mástoras work with community organisations?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. A significant part of the work is with CICs, charities, and community projects — particularly around funding narratives and governance clarity. The Grant Reframe service was built specifically for this."
+        }
+      }
+    ]
   }
   </script>
 
@@ -342,6 +426,49 @@
       font-weight: 600;
       font-size: 13.5px;
     }
+
+    /* ── WHY PEOPLE COME ── */
+    #why { background: var(--white); }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+      margin-top: 48px;
+    }
+
+    .why-card {
+      border-top: 3px solid var(--brass);
+      padding-top: 24px;
+    }
+
+    .why-card h3 {
+      font-size: 1em;
+      margin-bottom: 12px;
+      color: var(--slate);
+      line-height: 1.4;
+    }
+
+    .why-card p {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    /* ── SECONDARY SERVICES TOGGLE ── */
+    .svc-secondary-toggle {
+      background: none;
+      border: 1px solid var(--rule);
+      color: var(--teal);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .svc-secondary-toggle:hover { border-color: var(--teal); }
 
     /* ── HOW IT WORKS ── */
     #how-it-works {
@@ -682,7 +809,7 @@
       <div class="svc">
         <div class="svc-left">
           <p class="svc-name">Trades Business Tune-Up</p>
-          <p class="svc-desc">Specialist support for owner-operators in the trades. Pricing review, rate card, job scheduling workflow, and customer communications — sorted. Built by someone who has spent 25 years on sites, not in an office.</p>
+          <p class="svc-desc">Specialist support for owner-operators in the trades. Pricing review, day rate documented, job scheduling workflow, and customer communications — sorted. Built by someone who has spent 25 years on sites, not in an office.</p>
         </div>
         <span class="svc-price">£250</span>
       </div>
@@ -691,7 +818,8 @@
     <p class="services-foot">Need something different? <a href="mailto:hello@mastoras.uk">Get in touch</a> — most things can be scoped.</p>
 
     <div class="svc-secondary">
-      <p class="svc-secondary-label">Also available</p>
+      <button type="button" class="svc-secondary-toggle" onclick="toggleSecondary()" id="svc-toggle-btn">+ Also available — 4 more services</button>
+      <div id="svc-secondary-content" style="display:none;">
       <ul class="svc-secondary-list">
         <li><strong>The First Fix</strong> <span class="svc-secondary-price">£195</span> — One session to find your single biggest bottleneck and clear it. 1-page diagnostic, 30-day action plan. For businesses that are running but stuck.</li>
         <li><strong>Grant Reframe</strong> <span class="svc-secondary-price">£450</span> — A funder-aligned narrative for a specific project or application, written from the criteria backwards. Reusable language included.</li>
@@ -699,6 +827,31 @@
         <li><strong>Impact &amp; Governance Pack</strong> <span class="svc-secondary-price">from £395</span> — Impact measurement framework, governance health check, and stakeholder narrative support for CICs, charities, and community projects.</li>
       </ul>
       <p class="services-foot" style="margin-top:16px;"><a href="#contact">Get in touch</a> to discuss any of these.</p>
+      </div><!-- /svc-secondary-content -->
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ── WHY PEOPLE COME ── -->
+<section id="why">
+  <div class="wrap">
+    <h2 class="section-h2">Why people come to Mástoras</h2>
+    <p class="section-intro">Three patterns. All of them solvable — with the right conversation first.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <h3>Their offer is doing work they can't explain</h3>
+        <p>Good at what they do. Can't communicate why it matters. Every pitch, every proposal, every sales conversation takes three times as long as it should — because the story isn't there yet.</p>
+      </div>
+      <div class="why-card">
+        <h3>They're about to commit to something that hasn't been stress-tested</h3>
+        <p>A new venture. A second location. A pivot. The numbers look reasonable. The risks haven't been named. Once the money's in, walking back is expensive — getting clarity before is not.</p>
+      </div>
+      <div class="why-card">
+        <h3>Their funding case is real but their application sounds like everyone else's</h3>
+        <p>The project is genuine. But the application reads like it was written for a committee, not a person. Funders don't fund projects — they fund narratives that make sense of projects.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -782,7 +935,7 @@
       </div>
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">How long does a project take?</button>
-        <div class="faq-a"><p>A Clarity Check is a single session — usually 90 minutes. A Pre-Build Assessment takes 1–2 weeks depending on complexity. A Grant Reframe typically takes 5–7 working days once we've had the initial conversation.</p></div>
+        <div class="faq-a"><p>The First Fix is a single session — usually 90 minutes. A Pre-Build Assessment takes 1–2 weeks depending on complexity. A Grant Reframe typically takes 5–7 working days once we've had the initial conversation.</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">What if I don't know which service I need?</button>
@@ -836,7 +989,7 @@
           <input type="email" id="email" name="email" required placeholder="your@email.com">
         </div>
         <div class="form-group">
-          <label for="service">What are you looking at?</label>
+          <label for="service">Which service are you considering?</label>
           <select id="service" name="service">
             <option value="">Select a service (optional)</option>
             <option value="pre-build">Pre-Build Assessment</option>
@@ -884,6 +1037,15 @@ function toggleMobileNav() {
 function closeMobileNav() {
   document.getElementById('mobile-nav').classList.remove('open');
   document.querySelector('.hamburger').setAttribute('aria-expanded', 'false');
+}
+
+/* Secondary services toggle */
+function toggleSecondary() {
+  var content = document.getElementById('svc-secondary-content');
+  var btn = document.getElementById('svc-toggle-btn');
+  var isOpen = content.style.display !== 'none';
+  content.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? '+ Also available — 4 more services' : '− Also available — 4 more services';
 }
 
 /* FAQ accordion */
