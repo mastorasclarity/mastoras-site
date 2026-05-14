@@ -348,10 +348,17 @@
       </div>
 
       <!-- Submit -->
-      <div style="background: white; border-radius: 6px; border: 1px solid var(--rule); padding: 28px; text-align: center;">
-        <p style="font-size: 14px; color: #777; margin: 0 0 16px; line-height: 1.6;">Your score, all 12 answers, and next steps will appear below. Garry at Mástoras will also receive your completed BRICK and may follow up.</p>
-        <div class="error-msg" id="form-error">Please fill in your name, email, and business idea before submitting.</div>
-        <button type="submit" class="btn-primary" id="submit-btn">Submit my BRICK →</button>
+      <div style="background: white; border-radius: 6px; border: 1px solid var(--rule); padding: 28px;">
+        <p style="font-size: 14px; color: #777; margin: 0 0 20px; line-height: 1.6;">Your score, all 12 answers, and next steps will appear below. Garry at Mástoras will also receive your completed BRICK and may follow up.</p>
+
+        <!-- GDPR consent -->
+        <label style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; cursor: pointer; font-size: 14px; color: #555; line-height: 1.6;">
+          <input type="checkbox" id="consent" style="margin-top: 3px; width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--teal);">
+          <span>I understand that my name, email address, and BRICK answers will be stored securely by Mástoras and used only to follow up on this submission. I can request deletion at any time by emailing <a href="mailto:hello.mastoras@gmail.com" style="color: var(--teal);">hello.mastoras@gmail.com</a>.</span>
+        </label>
+
+        <div class="error-msg" id="form-error">Please fill in your name, email, and business idea, and tick the consent box before submitting.</div>
+        <button type="submit" class="btn-primary" id="submit-btn" style="width: 100%;">Submit my BRICK →</button>
       </div>
 
     </form>
@@ -424,7 +431,8 @@
       const idea = document.getElementById('idea').value.trim();
       const errorEl = document.getElementById('form-error');
 
-      if (!name || !email || !idea) {
+      const consent = document.getElementById('consent').checked;
+      if (!name || !email || !idea || !consent) {
         errorEl.style.display = 'block';
         errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
