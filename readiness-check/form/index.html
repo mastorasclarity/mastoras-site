@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The BRICK — Business Readiness and Idea Clarity Kit | Mástoras</title>
+  <meta name="description" content="Complete the BRICK online — 12 questions, auto-scored, results emailed to you. Test whether your business idea is ready for a plan or needs more proof first.">
+  <link rel="canonical" href="https://mastoras.uk/readiness-check/form">
+  <meta name="robots" content="index, follow">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --linen: #F4F1EC;
+      --slate: #2E3440;
+      --brass: #B08D57;
+      --teal: #0F595E;
+      --rule: #e0d9cd;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; color: var(--slate); background: var(--linen); margin: 0; }
+    h1, h2, h3 { font-family: Georgia, serif; }
+
+    .checkpoint-block { background: white; border-radius: 6px; border: 1px solid var(--rule); margin-bottom: 32px; overflow: hidden; }
+    .checkpoint-header { background: var(--slate); color: white; padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+    .checkpoint-num { background: var(--brass); color: white; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; padding: 3px 8px; border-radius: 3px; text-transform: uppercase; }
+    .checkpoint-title { font-family: Georgia, serif; font-size: 1.05rem; }
+    .checkpoint-body { padding: 24px; }
+
+    .question-block { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--rule); }
+    .question-block:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .question-label { font-weight: 600; font-size: 15px; line-height: 1.5; margin-bottom: 10px; display: block; }
+    .question-sub { font-size: 13px; color: #777; margin-bottom: 10px; }
+
+    textarea, input[type="text"], input[type="email"] {
+      width: 100%; border: 1px solid #d0c9bd; border-radius: 4px; padding: 10px 12px;
+      font-size: 14px; font-family: inherit; color: var(--slate); background: #faf8f5;
+      resize: vertical; min-height: 80px; transition: border-color 0.2s;
+    }
+    input[type="text"], input[type="email"] { min-height: unset; resize: none; }
+    textarea:focus, input[type="text"]:focus, input[type="email"]:focus {
+      outline: none; border-color: var(--teal); background: white;
+    }
+
+    .score-row { display: flex; gap: 0; margin-top: 12px; border: 1px solid #d0c9bd; border-radius: 4px; overflow: hidden; }
+    .score-option { flex: 1; }
+    .score-option input[type="radio"] { display: none; }
+    .score-option label {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 10px 8px; cursor: pointer; font-size: 13px; line-height: 1.3; text-align: center;
+      background: #faf8f5; border-right: 1px solid #d0c9bd; transition: background 0.15s, color 0.15s;
+      min-height: 56px;
+    }
+    .score-option:last-child label { border-right: none; }
+    .score-option label span.val { font-size: 18px; font-weight: 700; display: block; margin-bottom: 2px; }
+    .score-option label span.desc { font-size: 11px; color: #888; }
+    .score-option input[type="radio"]:checked + label { background: var(--teal); color: white; }
+    .score-option input[type="radio"]:checked + label span.desc { color: rgba(255,255,255,0.7); }
+
+    .checkbox-group label { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 14px; cursor: pointer; }
+    .checkbox-group input[type="checkbox"] { margin-top: 2px; width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--teal); }
+
+    .score-display { position: sticky; top: 0; z-index: 10; background: var(--slate); color: white; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .score-total { font-family: Georgia, serif; font-size: 1.4rem; }
+    .score-band-label { font-size: 13px; color: rgba(255,255,255,0.65); }
+
+    .btn-primary { display: inline-block; background: var(--teal); color: white; padding: 14px 32px; border-radius: 4px; font-weight: 600; font-size: 16px; border: none; cursor: pointer; width: 100%; transition: background 0.2s; }
+    .btn-primary:hover { background: #0a4347; }
+    .btn-primary:disabled { background: #aaa; cursor: not-allowed; }
+
+    .result-section { display: none; background: white; border-radius: 6px; border: 2px solid var(--teal); padding: 36px; margin-bottom: 32px; text-align: center; }
+    .result-score { font-family: Georgia, serif; font-size: 3rem; color: var(--teal); font-weight: bold; }
+    .result-band { font-size: 1.1rem; font-weight: 600; margin: 8px 0 16px; }
+    .result-desc { color: #555; font-size: 15px; line-height: 1.65; max-width: 500px; margin: 0 auto 28px; }
+    .btn-cta { display: inline-block; background: var(--teal); color: white; padding: 14px 28px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 16px; }
+
+    .form-intro-card { background: white; border-radius: 6px; border: 1px solid var(--rule); padding: 28px; margin-bottom: 32px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+
+    .error-msg { color: #c0392b; font-size: 13px; margin-top: 8px; display: none; }
+
+    @media (max-width: 600px) {
+      .score-option label span.desc { display: none; }
+      .score-option label { padding: 10px 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav style="background: var(--slate); padding: 16px 24px;">
+    <div style="max-width: 760px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+      <a href="https://mastoras.uk" style="color: white; text-decoration: none; font-family: Georgia, serif; font-size: 20px; font-weight: bold;">Mástoras</a>
+      <a href="/readiness-check" style="color: rgba(255,255,255,0.55); text-decoration: none; font-size: 14px;">← About the BRICK</a>
+    </div>
+  </nav>
+
+  <!-- Live score bar -->
+  <div class="score-display" id="score-bar">
+    <div>
+      <span class="score-band-label" id="bar-band">Answer the questions below to see your score</span>
+    </div>
+    <div style="text-align: right;">
+      <span class="score-total"><span id="live-score">0</span><span style="font-size: 1rem; opacity: 0.5;">/24</span></span>
+    </div>
+  </div>
+
+  <div style="max-width: 760px; margin: 0 auto; padding: 40px 20px 60px;">
+
+    <!-- Header -->
+    <div style="margin-bottom: 36px;">
+      <span style="background: var(--brass); color: white; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Free Tool</span>
+      <h1 style="font-size: clamp(1.6rem, 4vw, 2.2rem); margin: 14px 0 8px; line-height: 1.2;">The BRICK</h1>
+      <p style="color: #555; font-size: 16px; margin: 0 0 6px;">Business Readiness and Idea Clarity Kit</p>
+      <p style="color: #777; font-size: 14px; line-height: 1.65; margin: 0;">12 questions across 4 checkpoints. Score each one honestly — 0 if unclear, 1 if partly there, 2 if clear enough to act on. The low scores are the useful part. Your answers will be sent to Garry at Mástoras, and you'll see your result on screen.</p>
+    </div>
+
+    <!-- Result section (shown after submit) -->
+    <div class="result-section" id="result-section">
+      <p style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brass); margin: 0 0 8px;">Your BRICK score</p>
+      <div class="result-score" id="result-score-num">—</div>
+      <div class="result-band" id="result-band-title"></div>
+      <p class="result-desc" id="result-band-desc"></p>
+      <a href="https://calendly.com/garynicholl1515/20min" target="_blank" rel="noopener" class="btn-cta">Book a 20-minute Fit Call →</a>
+      <p style="margin-top: 16px; font-size: 13px; color: #999;">Garry will have your answers before the call.</p>
+    </div>
+
+    <!-- Your details -->
+    <div class="form-intro-card">
+      <h2 style="font-size: 1.1rem; margin: 0 0 18px;">Your details</h2>
+      <div class="form-group">
+        <label for="name">Your name <span style="color:#c0392b;">*</span></label>
+        <input type="text" id="name" name="name" required placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label for="email">Email address <span style="color:#c0392b;">*</span></label>
+        <input type="email" id="email" name="email" required placeholder="your@email.com">
+        <p style="font-size: 12px; color: #999; margin: 6px 0 0;">Your results will be sent here and to Garry at Mástoras.</p>
+      </div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="idea">Business or project idea <span style="color:#c0392b;">*</span></label>
+        <input type="text" id="idea" name="idea" required placeholder="e.g. A coffee shop in Coleraine / Expanding my plastering business to take on a second van">
+      </div>
+    </div>
+
+    <form id="brick-form" novalidate>
+      <input type="hidden" name="access_key" value="7f041ae4-23cd-4020-9b0f-a3ed0443ba17">
+      <input type="hidden" name="subject" value="BRICK Submission — Mástoras">
+      <input type="hidden" name="from_name" value="BRICK — Mástoras Website">
+      <input type="hidden" id="hidden-name" name="Name">
+      <input type="hidden" id="hidden-email" name="Email">
+      <input type="hidden" id="hidden-idea" name="Business_Idea">
+      <input type="hidden" id="hidden-total" name="Total_Score">
+      <input type="hidden" id="hidden-band" name="Score_Band">
+      <input type="checkbox" name="botcheck" style="display:none">
+
+      <!-- CHECKPOINT 1 -->
+      <div class="checkpoint-block">
+        <div class="checkpoint-header">
+          <span class="checkpoint-num">Checkpoint 1</span>
+          <span class="checkpoint-title">Idea clarity</span>
+        </div>
+        <div class="checkpoint-body">
+          <p style="font-size: 13px; color: rgba(255,255,255,0); margin: 0 0 20px; display:none;">If the idea cannot be explained plainly, the rest of the plan will only hide the confusion.</p>
+
+          <!-- Q1 -->
+          <div class="question-block">
+            <label class="question-label">1. What are you actually offering? Write it in one plain sentence. No slogans.</label>
+            <textarea name="Q1_Answer" placeholder="Write your answer here..."></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q1_Score" id="q1-0" value="0"><label for="q1-0"><span class="val">0</span><span class="desc">Unclear / guessed</span></label></div>
+              <div class="score-option"><input type="radio" name="Q1_Score" id="q1-1" value="1"><label for="q1-1"><span class="val">1</span><span class="desc">Partly clear</span></label></div>
+              <div class="score-option"><input type="radio" name="Q1_Score" id="q1-2" value="2"><label for="q1-2"><span class="val">2</span><span class="desc">Clear enough to act</span></label></div>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="question-block">
+            <label class="question-label">2. Who is the first real buyer, user, client, customer, funder, or decision-maker?</label>
+            <textarea name="Q2_Answer" placeholder="Write your answer here..."></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q2_Score" id="q2-0" value="0"><label for="q2-0"><span class="val">0</span><span class="desc">Unclear / guessed</span></label></div>
+              <div class="score-option"><input type="radio" name="Q2_Score" id="q2-1" value="1"><label for="q2-1"><span class="val">1</span><span class="desc">Partly clear</span></label></div>
+              <div class="score-option"><input type="radio" name="Q2_Score" id="q2-2" value="2"><label for="q2-2"><span class="val">2</span><span class="desc">Clear enough to act</span></label></div>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="question-block">
+            <label class="question-label">3. What problem does this solve that is serious enough for someone to pay, back, attend, book, or support?</label>
+            <textarea name="Q3_Answer" placeholder="Write your answer here..."></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q3_Score" id="q3-0" value="0"><label for="q3-0"><span class="val">0</span><span class="desc">Unclear / guessed</span></label></div>
+              <div class="score-option"><input type="radio" name="Q3_Score" id="q3-1" value="1"><label for="q3-1"><span class="val">1</span><span class="desc">Partly clear</span></label></div>
+              <div class="score-option"><input type="radio" name="Q3_Score" id="q3-2" value="2"><label for="q3-2"><span class="val">2</span><span class="desc">Clear enough to act</span></label></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CHECKPOINT 2 -->
+      <div class="checkpoint-block">
+        <div class="checkpoint-header">
+          <span class="checkpoint-num">Checkpoint 2</span>
+          <span class="checkpoint-title">Demand & difference</span>
+        </div>
+        <div class="checkpoint-body">
+
+          <!-- Q4 -->
+          <div class="question-block">
+            <label class="question-label">4. What would they use, do, buy, or choose if your idea did not exist?</label>
+            <textarea name="Q4_Answer" placeholder="Write your answer here..."></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q4_Score" id="q4-0" value="0"><label for="q4-0"><span class="val">0</span><span class="desc">Unclear / guessed</span></label></div>
+              <div class="score-option"><input type="radio" name="Q4_Score" id="q4-1" value="1"><label for="q4-1"><span class="val">1</span><span class="desc">Partly clear</span></label></div>
+              <div class="score-option"><input type="radio" name="Q4_Score" id="q4-2" value="2"><label for="q4-2"><span class="val">2</span><span class="desc">Clear enough to act</span></label></div>
+            </div>
+          </div>
+
+          <!-- Q5 -->
+          <div class="question-block">
+            <label class="question-label">5. Why would they choose your version over that alternative?</label>
+            <textarea name="Q5_Answer" placeholder="Write your answer here..."></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q5_Score" id="q5-0" value="0"><label for="q5-0"><span class="val">0</span><span class="desc">Unclear / guessed</span></label></div>
+              <div class="score-option"><input type="radio" name="Q5_Score" id="q5-1" value="1"><label for="q5-1"><span class="val">1</span><span class="desc">Partly clear</span></label></div>
+              <div class="score-option"><input type="radio" name="Q5_Score" id="q5-2" value="2"><label for="q5-2"><span class="val">2</span><span class="desc">Clear enough to act</span></label></div>
+            </div>
+          </div>
+
+          <!-- Q6 -->
+          <div class="question-block">
+            <label class="question-label">6. What proof of demand do you already have? Tick all that apply.</label>
+            <div class="checkbox-group" style="margin-bottom: 14px;">
+              <label><input type="checkbox" name="Q6_Proof" value="Someone has asked for this"> Someone has asked for this</label>
+              <label><input type="checkbox" name="Q6_Proof" value="Someone has already paid for something similar"> Someone has already paid for something similar</label>
+              <label><input type="checkbox" name="Q6_Proof" value="I have quotes, messages, enquiries, or letters of support"> I have quotes, messages, enquiries, or letters of support</label>
+              <label><input type="checkbox" name="Q6_Proof" value="I have tested a small version"> I have tested a small version</label>
+              <label><input type="checkbox" name="Q6_Proof" value="I have competitor evidence that people already spend money here"> I have competitor evidence that people already spend money here</label>
+              <label><input type="checkbox" name="Q6_Proof" value="I have no real proof yet"> I have no real proof yet</label>
+            </div>
+            <label class="question-sub" style="font-weight: 600; color: var(--slate);">Your strongest proof:</label>
+            <textarea name="Q6_Answer" placeholder="Describe your strongest evidence of demand..." style="min-height: 60px;"></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q6_Score" id="q6-0" value="0"><label for="q6-0"><span class="val">0</span><span class="desc">No real proof</span></label></div>
+              <div class="score-option"><input type="radio" name="Q6_Score" id="q6-1" value="1"><label for="q6-1"><span class="val">1</span><span class="desc">Weak / indirect</span></label></div>
+              <div class="score-option"><input type="radio" name="Q6_Score" id="q6-2" value="2"><label for="q6-2"><span class="val">2</span><span class="desc">Real proof exists</span></label></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CHECKPOINT 3 -->
+      <div class="checkpoint-block">
+        <div class="checkpoint-header">
+          <span class="checkpoint-num">Checkpoint 3</span>
+          <span class="checkpoint-title">Money logic</span>
+        </div>
+        <div class="checkpoint-body">
+
+          <!-- Q7 -->
+          <div class="question-block">
+            <label class="question-label">7. How does money come in? Tick all that apply.</label>
+            <div class="checkbox-group" style="margin-bottom: 14px;">
+              <label><input type="checkbox" name="Q7_Income" value="Customers pay directly"> Customers pay directly</label>
+              <label><input type="checkbox" name="Q7_Income" value="A funder pays"> A funder pays</label>
+              <label><input type="checkbox" name="Q7_Income" value="A partner or organisation pays"> A partner or organisation pays</label>
+              <label><input type="checkbox" name="Q7_Income" value="Membership or subscription"> Membership or subscription</label>
+              <label><input type="checkbox" name="Q7_Income" value="Mixed income"> Mixed income</label>
+              <label><input type="checkbox" name="Q7_Income" value="Not sure yet"> Not sure yet</label>
+            </div>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q7_Score" id="q7-0" value="0"><label for="q7-0"><span class="val">0</span><span class="desc">Not sure yet</span></label></div>
+              <div class="score-option"><input type="radio" name="Q7_Score" id="q7-1" value="1"><label for="q7-1"><span class="val">1</span><span class="desc">Partly clear</span></label></div>
+              <div class="score-option"><input type="radio" name="Q7_Score" id="q7-2" value="2"><label for="q7-2"><span class="val">2</span><span class="desc">Clear route in</span></label></div>
+            </div>
+          </div>
+
+          <!-- Q8 -->
+          <div class="question-block">
+            <label class="question-label">8. What are the main start-up costs and monthly costs?</label>
+            <textarea name="Q8_Answer" placeholder="List the main costs — even rough figures are useful here..."></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q8_Score" id="q8-0" value="0"><label for="q8-0"><span class="val">0</span><span class="desc">Unclear / guessed</span></label></div>
+              <div class="score-option"><input type="radio" name="Q8_Score" id="q8-1" value="1"><label for="q8-1"><span class="val">1</span><span class="desc">Partly clear</span></label></div>
+              <div class="score-option"><input type="radio" name="Q8_Score" id="q8-2" value="2"><label for="q8-2"><span class="val">2</span><span class="desc">Clear enough to act</span></label></div>
+            </div>
+          </div>
+
+          <!-- Q9 -->
+          <div class="question-block">
+            <label class="question-label">9. What is the minimum sales, bookings, grant amount, or monthly income needed for this to make sense?</label>
+            <textarea name="Q9_Answer" placeholder="Write your answer here..."></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q9_Score" id="q9-0" value="0"><label for="q9-0"><span class="val">0</span><span class="desc">Unclear / guessed</span></label></div>
+              <div class="score-option"><input type="radio" name="Q9_Score" id="q9-1" value="1"><label for="q9-1"><span class="val">1</span><span class="desc">Partly clear</span></label></div>
+              <div class="score-option"><input type="radio" name="Q9_Score" id="q9-2" value="2"><label for="q9-2"><span class="val">2</span><span class="desc">Clear enough to act</span></label></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CHECKPOINT 4 -->
+      <div class="checkpoint-block">
+        <div class="checkpoint-header">
+          <span class="checkpoint-num">Checkpoint 4</span>
+          <span class="checkpoint-title">Risk & delivery</span>
+        </div>
+        <div class="checkpoint-body">
+
+          <!-- Q10 -->
+          <div class="question-block">
+            <label class="question-label">10. What could break the idea? List the risks you are most tempted to avoid thinking about.</label>
+            <textarea name="Q10_Answer" placeholder="Write your answer here..."></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q10_Score" id="q10-0" value="0"><label for="q10-0"><span class="val">0</span><span class="desc">Not thought through</span></label></div>
+              <div class="score-option"><input type="radio" name="Q10_Score" id="q10-1" value="1"><label for="q10-1"><span class="val">1</span><span class="desc">Some risks named</span></label></div>
+              <div class="score-option"><input type="radio" name="Q10_Score" id="q10-2" value="2"><label for="q10-2"><span class="val">2</span><span class="desc">Risks clearly named</span></label></div>
+            </div>
+          </div>
+
+          <!-- Q11 -->
+          <div class="question-block">
+            <label class="question-label">11. What does this require from you each week — in time, skill, energy, delivery, admin, and sales?</label>
+            <textarea name="Q11_Answer" placeholder="Write your answer here..."></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q11_Score" id="q11-0" value="0"><label for="q11-0"><span class="val">0</span><span class="desc">Unclear / guessed</span></label></div>
+              <div class="score-option"><input type="radio" name="Q11_Score" id="q11-1" value="1"><label for="q11-1"><span class="val">1</span><span class="desc">Partly clear</span></label></div>
+              <div class="score-option"><input type="radio" name="Q11_Score" id="q11-2" value="2"><label for="q11-2"><span class="val">2</span><span class="desc">Realistic picture</span></label></div>
+            </div>
+          </div>
+
+          <!-- Q12 -->
+          <div class="question-block">
+            <label class="question-label">12. What must be proven before you commit proper money, sign a lease, buy equipment, apply for funding, or launch publicly?</label>
+            <textarea name="Q12_Answer" placeholder="Write your answer here..."></textarea>
+            <div class="score-row">
+              <div class="score-option"><input type="radio" name="Q12_Score" id="q12-0" value="0"><label for="q12-0"><span class="val">0</span><span class="desc">Not defined</span></label></div>
+              <div class="score-option"><input type="radio" name="Q12_Score" id="q12-1" value="1"><label for="q12-1"><span class="val">1</span><span class="desc">Partly defined</span></label></div>
+              <div class="score-option"><input type="radio" name="Q12_Score" id="q12-2" value="2"><label for="q12-2"><span class="val">2</span><span class="desc">Clearly defined</span></label></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div style="background: white; border-radius: 6px; border: 1px solid var(--rule); padding: 28px; text-align: center;">
+        <p style="font-size: 14px; color: #777; margin: 0 0 16px; line-height: 1.6;">Your score, all 12 answers, and next steps will appear below. Garry at Mástoras will also receive your completed BRICK and may follow up.</p>
+        <div class="error-msg" id="form-error">Please fill in your name, email, and business idea before submitting.</div>
+        <button type="submit" class="btn-primary" id="submit-btn">Submit my BRICK →</button>
+      </div>
+
+    </form>
+
+    <!-- Footer -->
+    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--rule); text-align: center;">
+      <p style="font-size: 13px; color: #999; margin: 0 0 8px;">The BRICK is not financial, legal, tax, planning, or funding advice. It is a thinking tool to help you decide what needs clarified before you commit time, money, or reputation.</p>
+      <p style="font-size: 13px; color: #bbb; margin: 0;">© 2026 Mástoras · <a href="https://mastoras.uk" style="color: #bbb;">mastoras.uk</a></p>
+    </div>
+
+  </div>
+
+  <script>
+    const scoreNames = ['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8','Q9','Q10','Q11','Q12'];
+    const bands = [
+      { min: 0,  max: 8,  title: 'Not ready yet', desc: 'Do not write a business plan. The idea needs more definition first — who the customer is, how money comes in, and what the core problem actually is. That is where to start.', colour: '#c0392b' },
+      { min: 9,  max: 15, title: 'Needs more evidence', desc: 'The idea has some shape but the gaps are significant. Test demand, clarify costs, or name the risks before committing to a full plan.', colour: '#e67e22' },
+      { min: 16, max: 20, title: 'Ready for assessment', desc: 'The idea has enough structure to stress-test properly. A Pre-Build Assessment would expose what holds and what does not — before money goes in.', colour: '#0F595E' },
+      { min: 21, max: 24, title: 'Ready to build', desc: 'The idea has enough clarity for a Business Build Pack after a review session. Book a Fit Call to confirm and agree next steps.', colour: '#27ae60' }
+    ];
+
+    function getScore() {
+      return scoreNames.reduce((total, q) => {
+        const checked = document.querySelector(`input[name="${q}_Score"]:checked`);
+        return total + (checked ? parseInt(checked.value) : 0);
+      }, 0);
+    }
+
+    function getBand(score) {
+      return bands.find(b => score >= b.min && score <= b.max);
+    }
+
+    function updateScoreBar() {
+      const score = getScore();
+      const band = getBand(score);
+      document.getElementById('live-score').textContent = score;
+      const answeredCount = scoreNames.filter(q => document.querySelector(`input[name="${q}_Score"]:checked`)).length;
+      if (answeredCount === 0) {
+        document.getElementById('bar-band').textContent = 'Answer the questions below to see your score';
+      } else {
+        document.getElementById('bar-band').textContent = band ? band.title : '';
+      }
+    }
+
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', updateScoreBar);
+    });
+
+    document.getElementById('brick-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const idea = document.getElementById('idea').value.trim();
+      const errorEl = document.getElementById('form-error');
+
+      if (!name || !email || !idea) {
+        errorEl.style.display = 'block';
+        return;
+      }
+      errorEl.style.display = 'none';
+
+      const score = getScore();
+      const band = getBand(score);
+
+      document.getElementById('hidden-name').value = name;
+      document.getElementById('hidden-email').value = email;
+      document.getElementById('hidden-idea').value = idea;
+      document.getElementById('hidden-total').value = score + '/24';
+      document.getElementById('hidden-band').value = band ? band.title : '';
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      const formData = new FormData(this);
+      // Append top-level fields
+      formData.set('Name', name);
+      formData.set('Email', email);
+      formData.set('Business_Idea', idea);
+      formData.set('Total_Score', score + '/24');
+      formData.set('Score_Band', band ? band.title : '');
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
+        const data = await res.json();
+
+        if (data.success) {
+          // Show result
+          document.getElementById('result-score-num').textContent = score + '/24';
+          document.getElementById('result-band-title').textContent = band ? band.title : '';
+          document.getElementById('result-band-desc').textContent = band ? band.desc : '';
+          const resultSection = document.getElementById('result-section');
+          resultSection.style.display = 'block';
+          resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          btn.textContent = 'Submitted ✓';
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Submit my BRICK →';
+          alert('Something went wrong. Please try again or email hello.mastoras@gmail.com directly.');
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Submit my BRICK →';
+        alert('Something went wrong. Please try again or email hello.mastoras@gmail.com directly.');
+      }
+    });
+  </script>
+
+</body>
+</html>
