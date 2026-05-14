@@ -400,6 +400,22 @@
       radio.addEventListener('change', updateScoreBar);
     });
 
+    const SUPABASE_URL = 'https://pxrfgltynqdceyozpovq.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cmZnbHR5bnFkY2V5b3pwb3ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3Nzk3MTAsImV4cCI6MjA5NDM1NTcxMH0.k8AXov5w5TdnxDdQ21OVz0rrzuSEvtxWi-yrrc-j4cw';
+
+    function getAnswer(q) {
+      const el = document.querySelector(`textarea[name="${q}_Answer"]`);
+      return el ? el.value.trim() || null : null;
+    }
+    function getScoreVal(q) {
+      const el = document.querySelector(`input[name="${q}_Score"]:checked`);
+      return el ? parseInt(el.value) : null;
+    }
+    function getChecked(name) {
+      const vals = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+      return vals.length ? vals.join(', ') : null;
+    }
+
     document.getElementById('brick-form').addEventListener('submit', async function(e) {
       e.preventDefault();
 
@@ -410,6 +426,7 @@
 
       if (!name || !email || !idea) {
         errorEl.style.display = 'block';
+        errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
       errorEl.style.display = 'none';
@@ -417,30 +434,58 @@
       const score = getScore();
       const band = getBand(score);
 
-      document.getElementById('hidden-name').value = name;
-      document.getElementById('hidden-email').value = email;
-      document.getElementById('hidden-idea').value = idea;
-      document.getElementById('hidden-total').value = score + '/24';
-      document.getElementById('hidden-band').value = band ? band.title : '';
-
       const btn = document.getElementById('submit-btn');
       btn.disabled = true;
       btn.textContent = 'Sending...';
 
+      // Build Supabase record
+      const record = {
+        name, email, business_idea: idea,
+        q1_answer: getAnswer('Q1'), q1_score: getScoreVal('Q1'),
+        q2_answer: getAnswer('Q2'), q2_score: getScoreVal('Q2'),
+        q3_answer: getAnswer('Q3'), q3_score: getScoreVal('Q3'),
+        q4_answer: getAnswer('Q4'), q4_score: getScoreVal('Q4'),
+        q5_answer: getAnswer('Q5'), q5_score: getScoreVal('Q5'),
+        q6_proof: getChecked('Q6_Proof'), q6_answer: getAnswer('Q6'), q6_score: getScoreVal('Q6'),
+        q7_income: getChecked('Q7_Income'), q7_score: getScoreVal('Q7'),
+        q8_answer: getAnswer('Q8'), q8_score: getScoreVal('Q8'),
+        q9_answer: getAnswer('Q9'), q9_score: getScoreVal('Q9'),
+        q10_answer: getAnswer('Q10'), q10_score: getScoreVal('Q10'),
+        q11_answer: getAnswer('Q11'), q11_score: getScoreVal('Q11'),
+        q12_answer: getAnswer('Q12'), q12_score: getScoreVal('Q12'),
+        total_score: score,
+        score_band: band ? band.title : null,
+        status: 'New'
+      };
+
+      // Build web3forms email payload
       const formData = new FormData(this);
-      // Append top-level fields
       formData.set('Name', name);
       formData.set('Email', email);
       formData.set('Business_Idea', idea);
       formData.set('Total_Score', score + '/24');
       formData.set('Score_Band', band ? band.title : '');
+      formData.set('subject', `BRICK Submission — ${name} — ${score}/24 (${band ? band.title : 'unscored'})`);
 
       try {
-        const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
-        const data = await res.json();
+        // Fire both in parallel
+        const [sbRes, w3Res] = await Promise.all([
+          fetch(`${SUPABASE_URL}/rest/v1/brick_submissions`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_ANON,
+              'Authorization': `Bearer ${SUPABASE_ANON}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(record)
+          }),
+          fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData })
+        ]);
 
-        if (data.success) {
-          // Show result
+        const w3Data = await w3Res.json();
+
+        if (sbRes.ok || w3Data.success) {
           document.getElementById('result-score-num').textContent = score + '/24';
           document.getElementById('result-band-title').textContent = band ? band.title : '';
           document.getElementById('result-band-desc').textContent = band ? band.desc : '';
@@ -449,9 +494,7 @@
           resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
           btn.textContent = 'Submitted ✓';
         } else {
-          btn.disabled = false;
-          btn.textContent = 'Submit my BRICK →';
-          alert('Something went wrong. Please try again or email hello.mastoras@gmail.com directly.');
+          throw new Error('Both submissions failed');
         }
       } catch (err) {
         btn.disabled = false;
