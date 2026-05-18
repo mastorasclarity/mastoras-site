@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Funding Assessment — Mástoras Advisor</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --slate:    #2E3440;
+      --linen:    #F4F1EC;
+      --brass:    #B08D57;
+      --teal:     #0F595E;
+      --graphite: #222222;
+      --white:    #ffffff;
+      --rule:     #e2e8f0;
+      --red:      #c0392b;
+      --green:    #0F595E;
+      --amber:    #B08D57;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--graphite);
+      background: var(--linen);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Merriweather', Georgia, serif; color: var(--slate); line-height: 1.25; }
+    h1, h2 { letter-spacing: -0.02em; }
+    a { color: var(--teal); }
+    img { max-width: 100%; height: auto; display: block; }
+    p { margin: 0; }
+
+    .wrap { max-width: 1060px; margin: 0 auto; padding: 0 32px; }
+    hr.rule { border: none; border-top: 1px solid var(--rule); }
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(46,52,64,0.82);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .modal-box {
+      background: var(--white);
+      max-width: 440px; width: 100%;
+      padding: 36px;
+      border-top: 3px solid var(--teal);
+    }
+    .modal-box h2 { font-size: 1.15rem; margin-bottom: 10px; }
+    .modal-box p  { font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.6; }
+    .modal-input {
+      width: 100%; padding: 11px 14px;
+      border: 1px solid var(--rule); border-radius: 4px;
+      font-family: 'DM Sans', sans-serif; font-size: 15px;
+      margin-bottom: 14px;
+    }
+    .modal-input:focus { outline: none; border-color: var(--teal); }
+
+    /* Report view modal */
+    .report-modal {
+      position: fixed; inset: 0;
+      background: rgba(46,52,64,0.82);
+      z-index: 900;
+      display: none; align-items: flex-start; justify-content: center;
+      padding: 48px 24px; overflow-y: auto;
+    }
+    .report-modal-box {
+      background: var(--white);
+      max-width: 760px; width: 100%;
+      padding: 32px;
+      border-top: 3px solid var(--brass);
+      position: relative;
+    }
+    .report-modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none; cursor: pointer;
+      font-size: 20px; color: #888; line-height: 1;
+    }
+    .report-modal-close:hover { color: var(--slate); }
+    #report-modal-content {
+      font-family: monospace; font-size: 12px;
+      white-space: pre-wrap; word-break: break-word;
+      color: var(--graphite); max-height: 60vh; overflow-y: auto;
+      background: var(--linen); padding: 16px; border-radius: 4px;
+      margin-top: 16px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--rule);
+      position: sticky; top: 0; z-index: 200;
+    }
+    .header-inner {
+      display: flex; justify-content: space-between; align-items: center; height: 72px;
+    }
+    .wordmark { text-decoration: none; display: flex; align-items: center; }
+    .wordmark img { height: 52px; width: auto; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      color: var(--graphite); text-decoration: none;
+      font-size: 14px; font-weight: 500; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-cta {
+      background: var(--teal); color: #fff !important;
+      padding: 9px 20px; font-size: 13px; font-weight: 600;
+      text-decoration: none; border-radius: 5px; transition: background 0.15s;
+    }
+    .nav-cta:hover { background: #0c4c50; }
+    .api-key-link {
+      font-size: 13px; color: #999 !important; font-weight: 400 !important;
+    }
+    .api-key-link:hover { color: var(--teal) !important; }
+    .hamburger {
+      display: none; background: none; border: none; cursor: pointer;
+      padding: 8px; flex-direction: column; gap: 5px;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--slate); }
+    .mobile-nav {
+      display: none; background: var(--white);
+      border-bottom: 1px solid var(--rule); padding: 16px 32px 24px;
+    }
+    .mobile-nav.open { display: block; }
+    .mobile-nav a {
+      display: block; color: var(--graphite); text-decoration: none;
+      font-size: 16px; font-weight: 500; padding: 12px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .mobile-nav a:last-child { border-bottom: none; }
+    .mobile-nav a:hover { color: var(--teal); }
+
+    /* ── HERO ── */
+    .page-hero { background: var(--slate); color: var(--white); padding: 56px 0 48px; }
+    .hero-eyebrow {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--brass); margin-bottom: 16px;
+      background: rgba(176,141,87,0.15); padding: 4px 10px; border-radius: 3px;
+    }
+    .page-hero h1 { font-size: clamp(1.6rem,3.5vw,2.2rem); color: var(--white); margin-bottom: 10px; }
+    .page-hero p  { color: rgba(255,255,255,0.6); font-size: 16px; }
+
+    /* ── MAIN GRID ── */
+    .main-section { padding: 48px 0 64px; }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 32px;
+    }
+    .form-section-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--brass); margin-bottom: 20px;
+      padding-bottom: 10px; border-bottom: 1px solid var(--rule);
+    }
+    .form-divider { border: none; border-top: 1px solid var(--rule); margin: 28px 0; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 600;
+      color: var(--slate); margin-bottom: 6px;
+    }
+    .form-group .hint {
+      font-size: 12px; color: #999; font-weight: 400; margin-left: 4px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 10px 13px;
+      border: 1px solid #ddd; border-radius: 4px;
+      font-family: 'DM Sans', sans-serif; font-size: 15px;
+      color: var(--graphite); background: var(--white);
+      transition: border-color 0.15s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none; border-color: var(--teal);
+      box-shadow: 0 0 0 2px rgba(15,89,94,0.1);
+    }
+    .form-input.field-error, .form-select.field-error, .form-textarea.field-error {
+      border-color: var(--red);
+      box-shadow: 0 0 0 2px rgba(192,57,43,0.1);
+    }
+    .form-textarea { min-height: 90px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* Toggle buttons */
+    .toggle-group { display: flex; gap: 0; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; }
+    .toggle-btn {
+      flex: 1; padding: 9px 4px; text-align: center;
+      background: var(--white); border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+      color: #888; transition: all 0.15s; border-right: 1px solid #ddd;
+    }
+    .toggle-btn:last-child { border-right: none; }
+    .toggle-btn.active { background: var(--teal); color: var(--white); }
+    .toggle-btn:hover:not(.active) { background: var(--linen); color: var(--graphite); }
+
+    /* Checkbox grid */
+    .checkbox-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 8px;
+    }
+    .checkbox-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: var(--graphite); cursor: pointer;
+      padding: 7px 10px; border: 1px solid #ddd; border-radius: 4px;
+      transition: all 0.12s;
+    }
+    .checkbox-label:hover { border-color: var(--teal); background: rgba(15,89,94,0.04); }
+    .checkbox-label input[type="checkbox"] { accent-color: var(--teal); width: 15px; height: 15px; flex-shrink: 0; }
+
+    /* Validation + hints */
+    .field-hint { font-size: 12px; color: var(--brass); margin-top: 5px; }
+    .validation-msg { font-size: 13px; color: var(--red); margin-bottom: 14px; }
+    .submit-error {
+      display: none; background: #fef2f2; border: 1px solid #fca5a5;
+      border-radius: 4px; padding: 12px 16px;
+      font-size: 14px; color: var(--red); margin-bottom: 14px;
+    }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%; padding: 15px; background: var(--teal); color: var(--white);
+      border: none; border-radius: 5px; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+      transition: background 0.15s; margin-top: 8px;
+    }
+    .btn-submit:hover:not(:disabled) { background: #0c4c50; }
+    .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; }
+
+    /* ── RESULTS PANEL ── */
+    .results-column { position: sticky; top: 88px; }
+    .results-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; flex-wrap: wrap; gap: 10px;
+    }
+    .btn-pdf {
+      display: none; background: var(--brass); color: var(--white);
+      border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+      transition: background 0.15s; white-space: nowrap;
+    }
+    .btn-pdf:hover:not(:disabled) { background: #9a7a48; }
+    .btn-pdf:disabled { opacity: 0.65; cursor: not-allowed; }
+
+    .results-placeholder {
+      background: var(--white); border: 1px dashed #ccc; border-radius: 6px;
+      padding: 48px 24px; text-align: center;
+    }
+    .results-placeholder p { color: #aaa; font-size: 15px; }
+    #results-panel .match-loading {
+      text-align: center; padding: 48px; color: #888; font-size: 15px;
+    }
+
+    /* Match cards */
+    .match-card {
+      background: var(--white); border: 1px solid var(--rule);
+      border-radius: 6px; padding: 20px; margin-bottom: 14px;
+    }
+    .match-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 10px; gap: 12px;
+    }
+    .match-name { font-family: 'Merriweather', serif; font-size: 1rem; color: var(--slate); }
+    .match-provider { font-size: 13px; color: #888; margin-top: 2px; }
+    .match-score { font-size: 1.1rem; font-weight: 700; white-space: nowrap; }
+    .score-bar-track {
+      background: #eee; border-radius: 4px; height: 5px;
+      margin-bottom: 12px; overflow: hidden;
+    }
+    .score-bar-fill { height: 100%; border-radius: 4px; transition: width 0.7s ease; }
+    .badge-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .badge {
+      padding: 3px 9px; border-radius: 3px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .badge-status-open     { background: var(--teal); color: white; }
+    .badge-status-rolling  { background: var(--brass); color: white; }
+    .badge-status-closing  { background: #c0392b; color: white; }
+    .badge-status-closed   { background: #999; color: white; }
+    .badge-neutral { background: var(--linen); color: var(--graphite); }
+    .why-block {
+      border-left: 3px solid var(--teal); padding: 10px 14px;
+      background: rgba(15,89,94,0.04); margin-bottom: 10px; border-radius: 0 4px 4px 0;
+    }
+    .risk-block {
+      border-left: 3px solid var(--brass); padding: 10px 14px;
+      background: rgba(176,141,87,0.06); margin-bottom: 10px; border-radius: 0 4px 4px 0;
+    }
+    .block-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .why-block .block-label  { color: var(--teal); }
+    .risk-block .block-label { color: var(--brass); }
+    .block-list { margin: 0; padding-left: 16px; font-size: 13.5px; color: var(--graphite); }
+    .block-list li { margin-bottom: 4px; }
+    .fund-link { font-size: 13px; color: var(--teal); text-decoration: none; font-weight: 500; }
+    .fund-link:hover { text-decoration: underline; }
+
+    /* ── PREVIOUS REPORTS ── */
+    .reports-section {
+      display: none; padding: 48px 0;
+      border-top: 1px solid var(--rule);
+    }
+    .reports-section h2 { font-size: 1.2rem; margin-bottom: 6px; }
+    .reports-section .sub { font-size: 14px; color: #888; margin-bottom: 24px; }
+    .reports-table-wrap { overflow-x: auto; }
+    .reports-table {
+      width: 100%; border-collapse: collapse;
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+    }
+    .reports-table th {
+      background: var(--slate); color: white; text-align: left;
+      padding: 10px 14px; font-weight: 600; font-size: 12px;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .reports-table td {
+      padding: 10px 14px; border-bottom: 1px solid var(--rule);
+      vertical-align: middle; color: var(--graphite);
+    }
+    .reports-table tr:last-child td { border-bottom: none; }
+    .reports-table tr:nth-child(even) td { background: var(--linen); }
+    .btn-view {
+      background: none; border: 1px solid var(--rule);
+      padding: 4px 12px; border-radius: 4px; cursor: pointer;
+      font-size: 13px; color: var(--teal); font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s;
+    }
+    .btn-view:hover { border-color: var(--teal); background: rgba(15,89,94,0.05); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--white); border-top: 1px solid var(--rule); padding: 36px 0;
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-left { font-size: 14px; color: #888; line-height: 1.9; }
+    .footer-left a { color: #888; text-decoration: underline; text-underline-offset: 2px; }
+    .footer-tagline {
+      font-family: 'Merriweather', serif; font-style: italic;
+      font-size: 14px; color: #ccc; letter-spacing: 0.02em;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 880px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .results-column { position: static; }
+    }
+    @media (max-width: 760px) {
+      .nav-links { display: none !important; }
+      .hamburger { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+      .checkbox-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .wrap { padding: 0 20px; }
+      .form-card { padding: 20px; }
+      .checkbox-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── API KEY MODAL ── -->
+<div class="modal-overlay" id="api-key-modal" style="display:none">
+  <div class="modal-box">
+    <h2>Connect to Mástoras Advisor</h2>
+    <p>Enter your API key to use this tool. It will be saved in your browser and remembered on future visits.</p>
+    <input type="password" class="modal-input" id="api-key-input" placeholder="Paste your API key here" autocomplete="off">
+    <button type="button" class="btn-submit" onclick="saveApiKey()" style="margin-top:0">Save Key &amp; Continue →</button>
+  </div>
+</div>
+
+<!-- ── REPORT VIEW MODAL ── -->
+<div class="report-modal" id="report-modal">
+  <div class="report-modal-box">
+    <button type="button" class="report-modal-close" onclick="closeReportModal()">✕</button>
+    <h2 style="font-size:1.1rem">Saved Report</h2>
+    <pre id="report-modal-content"></pre>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="wrap">
+    <div class="header-inner">
+      <a href="https://mastoras.uk" class="wordmark" aria-label="Mástoras home">
+        <img src="../mastoras-logo.png" alt="Mástoras" height="52">
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="https://mastoras.uk/#services">Services</a>
+        <a href="https://mastoras.uk/#about">About</a>
+        <a href="/blog">Blog</a>
+        <a href="#" onclick="showApiKeyModal(); return false;" class="api-key-link">⚙ API Key</a>
+        <a href="https://calendly.com/garynicholl1515/20min" target="_blank" rel="noopener" class="nav-cta">Book a Call</a>
+      </nav>
+      <button type="button" class="hamburger" onclick="toggleMobileNav()" aria-label="Open navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="https://mastoras.uk/#services">Services</a>
+    <a href="https://mastoras.uk/#about">About</a>
+    <a href="/blog">Blog</a>
+    <a href="#" onclick="showApiKeyModal(); return false;">⚙ Update API Key</a>
+  </div>
+</header>
+
+<!-- ── PAGE HERO ── -->
+<div class="page-hero">
+  <div class="wrap">
+    <span class="hero-eyebrow">Internal Tool</span>
+    <h1>Client Funding Assessment</h1>
+    <p>Enter the client profile below to generate a ranked Funding Match Report.</p>
+  </div>
+</div>
+
+<!-- ── MAIN CONTENT ── -->
+<section class="main-section">
+  <div class="wrap">
+    <div class="main-grid">
+
+      <!-- ── FORM ── -->
+      <div>
+        <div class="form-card">
+
+          <!-- Section A -->
+          <p class="form-section-title">A — Client &amp; Organisation</p>
+
+          <div class="form-group">
+            <label for="client_ref">Client reference <span class="hint">(optional)</span></label>
+            <input type="text" id="client_ref" class="form-input" placeholder="e.g. Jones Joinery 01">
+            <p class="field-hint" id="client-ref-hint"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="org_name">Organisation name <span style="color:var(--red)">*</span></label>
+            <input type="text" id="org_name" class="form-input" placeholder="e.g. Causeway Creative CIC">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="org_type">Organisation type <span style="color:var(--red)">*</span></label>
+              <select id="org_type" class="form-select">
+                <option value="">Select type…</option>
+                <option value="Sole trader">Sole trader</option>
+                <option value="SME">SME</option>
+                <option value="Limited company">Limited company</option>
+                <option value="Social enterprise">Social enterprise</option>
+                <option value="Charity / CIC">Charity / CIC</option>
+                <option value="Community group">Community group</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="sector">Sector <span style="color:var(--red)">*</span></label>
+              <select id="sector" class="form-select">
+                <option value="">Select sector…</option>
+                <option value="Construction & Trades">Construction &amp; Trades</option>
+                <option value="Retail & Hospitality">Retail &amp; Hospitality</option>
+                <option value="Food & Drink">Food &amp; Drink</option>
+                <option value="Creative & Digital">Creative &amp; Digital</option>
+                <option value="Health & Social Care">Health &amp; Social Care</option>
+                <option value="Agriculture & Rural">Agriculture &amp; Rural</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Community & Voluntary">Community &amp; Voluntary</option>
+                <option value="Education & Training">Education &amp; Training</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="stage">Business stage <span style="color:var(--red)">*</span></label>
+              <select id="stage" class="form-select">
+                <option value="">Select stage…</option>
+                <option value="Pre-start">Pre-start (idea stage)</option>
+                <option value="Early stage">Early stage (0–2 yrs)</option>
+                <option value="Trading">Trading (2–5 yrs)</option>
+                <option value="Expanding">Expanding (5+ yrs)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="council_area">Council area <span style="color:var(--red)">*</span></label>
+              <select id="council_area" class="form-select">
+                <option value="">Select council…</option>
+                <option>Antrim and Newtownabbey</option>
+                <option>Ards and North Down</option>
+                <option>Armagh City, Banbridge and Craigavon</option>
+                <option>Belfast City</option>
+                <option>Causeway Coast and Glens</option>
+                <option>Derry City and Strabane</option>
+                <option>Fermanagh and Omagh</option>
+                <option>Lisburn and Castlereagh</option>
+                <option>Mid and East Antrim</option>
+                <option>Mid Ulster</option>
+                <option>Newry, Mourne and Down</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="years_trading">Years trading</label>
+              <input type="number" id="years_trading" class="form-input" min="0" step="0.5" placeholder="0">
+            </div>
+            <div class="form-group">
+              <label>VAT registered</label>
+              <div class="toggle-group">
+                <button type="button" class="toggle-btn" id="vat_no" onclick="setVat(false)">No</button>
+                <button type="button" class="toggle-btn" id="vat_yes" onclick="setVat(true)">Yes</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="previous_grants">Previous grants received <span class="hint">(comma-separated)</span></label>
+            <input type="text" id="previous_grants" class="form-input" placeholder="e.g. DAERA LEADER, Invest NI Propel">
+          </div>
+
+          <hr class="form-divider">
+
+          <!-- Section B -->
+          <p class="form-section-title">B — Project</p>
+
+          <div class="form-group">
+            <label for="project_name">Project name <span class="hint">(optional)</span></label>
+            <input type="text" id="project_name" class="form-input" placeholder="e.g. Workshop Expansion Phase 1">
+          </div>
+
+          <div class="form-group">
+            <label for="description">What is the project? <span style="color:var(--red)">*</span></label>
+            <textarea id="description" class="form-textarea" placeholder="Describe what you're trying to do — what it involves, why now, and what the outcome will be."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="funding_ask">Funding ask (£) <span style="color:var(--red)">*</span></label>
+              <input type="number" id="funding_ask" class="form-input" min="0" step="500" placeholder="15000">
+            </div>
+            <div class="form-group">
+              <label for="total_cost">Total project cost (£)</label>
+              <input type="number" id="total_cost" class="form-input" min="0" step="500" placeholder="30000">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Project tags <span class="hint">(tick all that apply)</span></label>
+            <div class="checkbox-grid">
+              <label class="checkbox-label"><input type="checkbox" name="tags" value="capital equipment"> Capital equipment</label>
+              <label class="checkbox-label"><input type="checkbox" name="tags" value="premises renovation"> Premises / renovation</label>
+              <label class="checkbox-label"><input type="checkbox" name="tags" value="digital technology"> Digital / tech</label>
+              <label class="checkbox-label"><input type="checkbox" name="tags" value="export"> Export</label>
+              <label class="checkbox-label"><input type="checkbox" name="tags" value="research and development"> R&amp;D</label>
+              <label class="checkbox-label"><input type="checkbox" name="tags" value="training"> Training</label>
+              <label class="checkbox-label"><input type="checkbox" name="tags" value="marketing"> Marketing</label>
+              <label class="checkbox-label"><input type="checkbox" name="tags" value="recruitment"> Recruitment</label>
+              <label class="checkbox-label"><input type="checkbox" name="tags" value="community benefit"> Community benefit</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Evidence available <span class="hint">(tick all that apply)</span></label>
+            <div class="checkbox-grid">
+              <label class="checkbox-label"><input type="checkbox" name="evidence" value="business plan"> Business plan</label>
+              <label class="checkbox-label"><input type="checkbox" name="evidence" value="financial projections"> Financial projections</label>
+              <label class="checkbox-label"><input type="checkbox" name="evidence" value="letters of support"> Letters of support</label>
+              <label class="checkbox-label"><input type="checkbox" name="evidence" value="quotes obtained"> Quotes obtained</label>
+              <label class="checkbox-label"><input type="checkbox" name="evidence" value="trading history"> Trading history</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Effort capacity <span class="hint">(how much time can the client commit to the application?)</span></label>
+            <div class="toggle-group" style="max-width:280px">
+              <button type="button" class="toggle-btn effort-btn" data-value="low" onclick="setEffort(this)">Low</button>
+              <button type="button" class="toggle-btn effort-btn active" data-value="medium" onclick="setEffort(this)">Medium</button>
+              <button type="button" class="toggle-btn effort-btn" data-value="high" onclick="setEffort(this)">High</button>
+            </div>
+          </div>
+
+          <p class="validation-msg" id="validation-msg"></p>
+          <div class="submit-error" id="submit-error"></div>
+          <button type="button" class="btn-submit" id="submit-btn" onclick="submitForm()">Generate Funding Report →</button>
+
+        </div>
+      </div>
+
+      <!-- ── RESULTS ── -->
+      <div class="results-column">
+        <div class="results-header">
+          <div id="results-heading"></div>
+          <button type="button" class="btn-pdf" id="pdf-btn" onclick="downloadPdf()">Download PDF Report</button>
+        </div>
+        <div id="results-panel">
+          <div class="results-placeholder">
+            <p>Your matched funding schemes<br>will appear here.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── PREVIOUS REPORTS ── -->
+<section class="reports-section" id="previous-reports">
+  <div class="wrap">
+    <h2>Previous Reports</h2>
+    <p class="sub">Last 10 reports generated — click View to inspect the full JSON.</p>
+    <div class="reports-table-wrap">
+      <table class="reports-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Client ref</th>
+            <th>Organisation</th>
+            <th>Top fund</th>
+            <th style="text-align:center">Matches</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="reports-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-left">
+        Garry Nicholl · Mástoras — Clarity &amp; Story Consultancy<br>
+        <a href="mailto:hello.mastoras@gmail.com">hello.mastoras@gmail.com</a> · Causeway Coast and Glens, Northern Ireland<br>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+      </div>
+      <p class="footer-tagline">Structure → Story → Soul</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── STATE ── */
+  var state = {
+    apiKey: localStorage.getItem('mastoras_api_key') || '',
+    lastPayload: null,
+    lastReportId: null
+  };
+
+  var API = 'https://api.mastoras.uk';
+
+  /* ── INIT ── */
+  window.addEventListener('DOMContentLoaded', function () {
+    setVat(false);
+    if (!state.apiKey) {
+      showApiKeyModal();
+    } else {
+      loadPreviousReports();
+    }
+  });
+
+  /* ── API KEY MODAL ── */
+  function showApiKeyModal() {
+    document.getElementById('api-key-modal').style.display = 'flex';
+    setTimeout(function () { document.getElementById('api-key-input').focus(); }, 100);
+  }
+
+  function saveApiKey() {
+    var key = document.getElementById('api-key-input').value.trim();
+    if (!key) return;
+    state.apiKey = key;
+    localStorage.setItem('mastoras_api_key', key);
+    document.getElementById('api-key-modal').style.display = 'none';
+    loadPreviousReports();
+  }
+
+  document.getElementById('api-key-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') saveApiKey();
+  });
+
+  /* ── VAT + EFFORT TOGGLES ── */
+  function setVat(yes) {
+    document.getElementById('vat_yes').classList.toggle('active', yes);
+    document.getElementById('vat_no').classList.toggle('active', !yes);
+  }
+
+  function setEffort(el) {
+    document.querySelectorAll('.effort-btn').forEach(function (b) { b.classList.remove('active'); });
+    el.classList.add('active');
+  }
+
+  /* ── BUILD PAYLOAD ── */
+  function buildPayload() {
+    var tags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(function (el) { return el.value; });
+    var evidence = Array.from(document.querySelectorAll('input[name="evidence"]:checked')).map(function (el) { return el.value; });
+    var prevGrants = document.getElementById('previous_grants').value.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+    var effortBtn = document.querySelector('.effort-btn.active');
+    var council = document.getElementById('council_area').value;
+
+    return {
+      client_ref: document.getElementById('client_ref').value.trim() || null,
+      org_profile: {
+        org_name: document.getElementById('org_name').value.trim(),
+        org_type: document.getElementById('org_type').value,
+        sector: document.getElementById('sector').value,
+        stage: document.getElementById('stage').value,
+        location: council,
+        council_area: council,
+        years_trading: parseFloat(document.getElementById('years_trading').value) || 0,
+        vat_registered: document.getElementById('vat_yes').classList.contains('active'),
+        previous_grants: prevGrants
+      },
+      project_profile: {
+        project_name: document.getElementById('project_name').value.trim() || null,
+        description: document.getElementById('description').value.trim(),
+        funding_ask: parseFloat(document.getElementById('funding_ask').value) || 0,
+        total_cost: parseFloat(document.getElementById('total_cost').value) || 0,
+        tags: tags,
+        evidence_available: evidence
+      },
+      constraints: {
+        effort_capacity: effortBtn ? effortBtn.dataset.value : 'medium'
+      }
+    };
+  }
+
+  /* ── VALIDATE ── */
+  function validateForm() {
+    document.querySelectorAll('.field-error').forEach(function (el) { el.classList.remove('field-error'); });
+    document.getElementById('validation-msg').textContent = '';
+    document.getElementById('client-ref-hint').textContent = '';
+
+    var valid = true;
+    var checks = [
+      { id: 'org_name',     check: function (v) { return v.trim().length > 0; } },
+      { id: 'org_type',     check: function (v) { return v.length > 0; } },
+      { id: 'sector',       check: function (v) { return v.length > 0; } },
+      { id: 'council_area', check: function (v) { return v.length > 0; } },
+      { id: 'description',  check: function (v) { return v.trim().length > 0; } },
+      { id: 'funding_ask',  check: function (v) { return parseFloat(v) > 0; } }
+    ];
+
+    checks.forEach(function (c) {
+      var el = document.getElementById(c.id);
+      if (!c.check(el.value)) {
+        el.classList.add('field-error');
+        valid = false;
+      }
+    });
+
+    if (!valid) {
+      document.getElementById('validation-msg').textContent = 'Please complete all required fields (marked *) before generating.';
+    }
+
+    if (valid && !document.getElementById('client_ref').value.trim()) {
+      document.getElementById('client-ref-hint').textContent = 'Consider adding a client reference for your records.';
+    }
+
+    return valid;
+  }
+
+  /* ── SUBMIT ── */
+  function submitForm() {
+    if (!validateForm()) return;
+
+    var btn = document.getElementById('submit-btn');
+    btn.textContent = 'Generating…';
+    btn.disabled = true;
+    document.getElementById('submit-error').style.display = 'none';
+
+    var panel = document.getElementById('results-panel');
+    panel.innerHTML = '<div class="match-loading">Matching against 141 funding schemes…</div>';
+    document.getElementById('pdf-btn').style.display = 'none';
+    document.getElementById('results-heading').innerHTML = '';
+
+    var payload = buildPayload();
+    state.lastPayload = payload;
+
+    fetch(API + '/report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': state.apiKey },
+      body: JSON.stringify(payload)
+    })
+    .then(function (res) {
+      if (res.status === 401) { throw new Error('401'); }
+      if (!res.ok) { return res.json().then(function (e) { throw new Error(res.status + ':' + (e.detail || 'error')); }); }
+      return res.json();
+    })
+    .then(function (report) {
+      state.lastReportId = report.report_id;
+      renderResults(report);
+      document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      loadPreviousReports();
+    })
+    .catch(function (err) {
+      var msg = err.message;
+      if (msg === '401') {
+        showError('Invalid API key. Click ⚙ API Key in the header to update it.');
+      } else {
+        showError('Error ' + msg + ' — check your connection and try again.');
+      }
+      panel.innerHTML = '<div class="results-placeholder"><p>Something went wrong. Check the error above and try again.</p></div>';
+    })
+    .finally(function () {
+      btn.textContent = 'Generate Funding Report →';
+      btn.disabled = false;
+    });
+  }
+
+  /* ── RENDER RESULTS ── */
+  function renderResults(report) {
+    var matches = report.matches || [];
+    var panel = document.getElementById('results-panel');
+    var heading = document.getElementById('results-heading');
+
+    document.getElementById('pdf-btn').style.display = matches.length > 0 ? 'block' : 'none';
+
+    heading.innerHTML = '<h2 style="font-family:\'Merriweather\',serif;font-size:1.1rem;color:var(--slate)">Found ' + matches.length + ' matching scheme' + (matches.length !== 1 ? 's' : '') + '</h2>' +
+      '<p style="font-size:12px;color:#aaa;margin-top:2px">' + new Date().toLocaleTimeString('en-GB') + (report.applicant_summary && report.applicant_summary.organisation ? ' · ' + report.applicant_summary.organisation : '') + '</p>';
+
+    if (matches.length === 0) {
+      panel.innerHTML = '<div style="background:var(--linen);padding:28px 24px;border-radius:4px;text-align:center"><p style="color:#888">No matching schemes found for this profile.</p><p style="color:#aaa;font-size:13px;margin-top:8px">Try adjusting the sector, stage, or funding ask amount.</p></div>';
+      return;
+    }
+
+    var html = '';
+    matches.forEach(function (m) {
+      var score = Math.round(m.match_score || 0);
+      var scoreColour = score >= 70 ? 'var(--green)' : score >= 40 ? 'var(--amber)' : 'var(--red)';
+      var status = (m.status || '').toLowerCase();
+      var statusClass = status === 'open' ? 'badge-status-open' : status === 'rolling' ? 'badge-status-rolling' : status.indexOf('clos') === 0 && status !== 'closed' ? 'badge-status-closing' : status === 'closed' ? 'badge-status-closed' : 'badge-neutral';
+
+      var whyHtml = '';
+      if (m.why_it_fits && m.why_it_fits.length) {
+        whyHtml = '<div class="why-block"><p class="block-label">Why it fits</p><ul class="block-list">' +
+          m.why_it_fits.map(function (w) { return '<li>' + escHtml(w) + '</li>'; }).join('') +
+          '</ul></div>';
+      }
+
+      var riskHtml = '';
+      if (m.risks && m.risks.length) {
+        riskHtml = '<div class="risk-block"><p class="block-label">Watch out for</p><ul class="block-list">' +
+          m.risks.map(function (r) { return '<li>' + escHtml(r) + '</li>'; }).join('') +
+          '</ul></div>';
+      }
+
+      var fundLink = m.source_url ? '<a href="' + escHtml(m.source_url) + '" target="_blank" rel="noopener" class="fund-link">View fund →</a>' : '';
+
+      html += '<div class="match-card">' +
+        '<div class="match-header">' +
+          '<div><p class="match-name">' + escHtml(m.fund_name) + '</p><p class="match-provider">' + escHtml(m.provider || '') + '</p></div>' +
+          '<div style="text-align:right"><span class="match-score" style="color:' + scoreColour + '">' + score + '<span style="font-size:11px;font-weight:400;color:#aaa">/100</span></span></div>' +
+        '</div>' +
+        '<div class="score-bar-track"><div class="score-bar-fill" style="background:' + scoreColour + ';width:' + score + '%"></div></div>' +
+        '<div class="badge-row">' +
+          '<span class="badge ' + statusClass + '">' + escHtml(m.status || 'Unknown') + '</span>' +
+          (m.grant_size ? '<span class="badge badge-neutral">' + escHtml(m.grant_size) + '</span>' : '') +
+          (m.effort_level ? '<span class="badge badge-neutral">Effort: ' + escHtml(m.effort_level) + '</span>' : '') +
+        '</div>' +
+        whyHtml + riskHtml + fundLink +
+        '</div>';
+    });
+
+    panel.innerHTML = html;
+  }
+
+  /* ── PDF DOWNLOAD ── */
+  function downloadPdf() {
+    if (!state.lastPayload) return;
+    var btn = document.getElementById('pdf-btn');
+    btn.textContent = 'Preparing PDF…';
+    btn.disabled = true;
+
+    fetch(API + '/report/pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': state.apiKey },
+      body: JSON.stringify(state.lastPayload)
+    })
+    .then(function (res) {
+      if (!res.ok) throw new Error('PDF error ' + res.status);
+      return res.blob();
+    })
+    .then(function (blob) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      var orgName = ((state.lastPayload.org_profile && state.lastPayload.org_profile.org_name) || 'report').replace(/[^\w\s-]/g, '').replace(/\s+/g, '_');
+      a.download = 'mastoras_report_' + orgName + '.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    })
+    .catch(function (err) {
+      showError(err.message + ' — try again or check your connection.');
+    })
+    .finally(function () {
+      btn.textContent = 'Download PDF Report';
+      btn.disabled = false;
+    });
+  }
+
+  /* ── PREVIOUS REPORTS ── */
+  function loadPreviousReports() {
+    if (!state.apiKey) return;
+    fetch(API + '/reports?limit=10', {
+      headers: { 'X-API-Key': state.apiKey }
+    })
+    .then(function (res) { return res.ok ? res.json() : []; })
+    .then(function (reports) { renderReportsTable(reports); })
+    .catch(function () {});
+  }
+
+  function renderReportsTable(reports) {
+    var section = document.getElementById('previous-reports');
+    if (!reports || reports.length === 0) { section.style.display = 'none'; return; }
+    section.style.display = 'block';
+    var tbody = document.getElementById('reports-tbody');
+    tbody.innerHTML = reports.map(function (r) {
+      var date = r.created_at ? new Date(r.created_at).toLocaleDateString('en-GB') : '—';
+      return '<tr>' +
+        '<td>' + date + '</td>' +
+        '<td>' + escHtml(r.client_ref || '—') + '</td>' +
+        '<td>' + escHtml(r.client_name || '—') + '</td>' +
+        '<td>' + escHtml(r.top_fund || '—') + '</td>' +
+        '<td style="text-align:center">' + (r.total_matches || 0) + '</td>' +
+        '<td><button type="button" class="btn-view" onclick="viewReport(\'' + r.id + '\')">View</button></td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  function viewReport(id) {
+    fetch(API + '/reports/' + id, { headers: { 'X-API-Key': state.apiKey } })
+    .then(function (res) { return res.ok ? res.json() : null; })
+    .then(function (data) { if (data) showReportModal(data); })
+    .catch(function () {});
+  }
+
+  function showReportModal(data) {
+    document.getElementById('report-modal-content').textContent = JSON.stringify(data.report || data, null, 2);
+    document.getElementById('report-modal').style.display = 'flex';
+  }
+
+  function closeReportModal() {
+    document.getElementById('report-modal').style.display = 'none';
+  }
+
+  /* Close modals on backdrop click */
+  document.getElementById('report-modal').addEventListener('click', function (e) {
+    if (e.target === this) closeReportModal();
+  });
+
+  /* ── HELPERS ── */
+  function showError(msg) {
+    var el = document.getElementById('submit-error');
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(function () { el.style.display = 'none'; }, 10000);
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── MOBILE NAV ── */
+  function toggleMobileNav() {
+    var nav = document.getElementById('mobile-nav');
+    var btn = document.querySelector('.hamburger');
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+  }
+</script>
+
+</body>
+</html>
