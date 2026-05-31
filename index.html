@@ -543,7 +543,7 @@
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 10px;
-      padding: 24px 26px;
+      padding: 22px 24px;
     }
     .fi-preview-header {
       font-size: 10px; font-weight: 700;
@@ -560,46 +560,87 @@
     .fi-preview-live::before {
       content: ''; width: 5px; height: 5px; border-radius: 50%;
       background: #4caf50; display: block;
+      animation: pulse-dot 2s ease-in-out infinite;
     }
-    .fi-preview-tags {
-      display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px;
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
     }
-    .fi-preview-tag {
-      font-size: 11px; padding: 4px 9px;
-      background: rgba(255,255,255,0.07); border-radius: 3px;
-      color: rgba(255,255,255,0.5);
+
+    /* Animated form fields */
+    .fi-anim-fields { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .fi-anim-field {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px; padding: 7px 10px;
+      transition: border-color 0.25s, background 0.25s;
     }
+    .fi-anim-field.fi-active { border-color: rgba(176,141,87,0.5); background: rgba(176,141,87,0.05); }
+    .fi-anim-field.fi-done  { border-color: rgba(255,255,255,0.12); }
+    .fi-anim-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.2);
+      display: block; margin-bottom: 3px;
+    }
+    .fi-anim-value {
+      font-size: 12px; color: rgba(255,255,255,0.75);
+      min-height: 15px; display: flex; align-items: center;
+    }
+    .fi-anim-cursor {
+      display: inline-block; width: 1.5px; height: 13px;
+      background: var(--brass); margin-left: 1px;
+      vertical-align: middle; opacity: 0;
+    }
+    .fi-anim-cursor.fi-blink { animation: fi-blink 0.7s step-end infinite; }
+    @keyframes fi-blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .fi-anim-btn {
+      background: rgba(15,89,94,0.25); border: 1px solid rgba(15,89,94,0.4);
+      color: rgba(255,255,255,0.3); padding: 10px 14px;
+      border-radius: 5px; font-size: 12px; font-weight: 600;
+      text-align: center; margin-top: 10px;
+      transition: background 0.35s, color 0.35s, border-color 0.35s, transform 0.1s;
+      cursor: default;
+    }
+    .fi-anim-btn.fi-ready   { background: var(--teal); color: #fff; border-color: var(--teal); }
+    .fi-anim-btn.fi-pressed { transform: scale(0.96); }
+
     .fi-preview-result {
-      background: rgba(176,141,87,0.1);
-      border: 1px solid rgba(176,141,87,0.2);
-      border-radius: 6px; padding: 18px 16px;
-      text-align: center; margin-bottom: 16px;
+      background: rgba(176,141,87,0.1); border: 1px solid rgba(176,141,87,0.2);
+      border-radius: 6px; padding: 16px;
+      text-align: center; margin-bottom: 14px;
+      opacity: 0; transition: opacity 0.5s;
     }
+    .fi-preview-result.fi-show { opacity: 1; }
     .fi-preview-big {
       font-family: 'Merriweather', serif;
-      font-size: 2.8rem; font-weight: 700;
+      font-size: 2.6rem; font-weight: 700;
       color: var(--brass); line-height: 1;
-      display: block; margin-bottom: 5px;
+      display: block; margin-bottom: 4px;
     }
     .fi-preview-big-label {
-      font-size: 11px; color: rgba(255,255,255,0.38);
+      font-size: 10px; color: rgba(255,255,255,0.38);
       text-transform: uppercase; letter-spacing: 0.09em;
     }
     .fi-preview-section-label {
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: rgba(255,255,255,0.22); margin-bottom: 8px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 8px;
     }
     .fi-preview-fund {
       display: flex; align-items: center; gap: 9px;
       padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-      font-size: 12.5px; color: rgba(255,255,255,0.62); line-height: 1.35;
+      font-size: 12px; color: rgba(255,255,255,0.62); line-height: 1.35;
+      opacity: 0; transform: translateX(-6px);
+      transition: opacity 0.3s, transform 0.3s;
     }
     .fi-preview-fund:last-child { border-bottom: none; padding-bottom: 0; }
+    .fi-preview-fund.fi-show { opacity: 1; transform: translateX(0); }
     .fi-preview-fund-dot {
       width: 5px; height: 5px; border-radius: 50%;
       background: var(--brass); flex-shrink: 0;
     }
+    #anim-funds { opacity: 0; transition: opacity 0.4s; }
+    #anim-funds.fi-show { opacity: 1; }
 
     /* ── HERO BRICK PATH ── */
     .hero-brick-path {
@@ -902,13 +943,19 @@
     }
 
     @media (max-width: 900px) {
-      .fi-grid { grid-template-columns: 1fr; gap: 0; }
-      .fi-right { display: none; }
+      .fi-grid { grid-template-columns: 1fr; gap: 48px; }
+      .fi-right { display: block; max-width: 420px; }
     }
 
     @media (max-width: 480px) {
       .wrap { padding: 0 20px; }
       section { padding: 72px 0; }
+      .fi-stats { grid-template-columns: repeat(3, 1fr); gap: 0; }
+      .fi-stat { padding-right: 8px; }
+      .fi-stat-num { font-size: 1.8em; }
+      .fi-ctas { flex-direction: column; align-items: stretch; }
+      .fi-ctas .btn-primary { text-align: center; }
+      .hero-brick-path { flex-direction: column; align-items: flex-start; gap: 6px; }
     }
   </style>
 </head>
@@ -1044,30 +1091,39 @@
       </div>
 
       <div class="fi-right">
-        <div class="fi-preview">
+        <div class="fi-preview" id="fi-preview-card">
           <div class="fi-preview-header">
             <span>Mástoras Funding Check</span>
             <span class="fi-preview-live">Live</span>
           </div>
-          <div class="fi-preview-tags">
-            <span class="fi-preview-tag">Social Enterprise</span>
-            <span class="fi-preview-tag">Community &amp; Social</span>
-            <span class="fi-preview-tag">Belfast</span>
-            <span class="fi-preview-tag">£15,000</span>
+          <div class="fi-anim-fields">
+            <div class="fi-anim-field" id="anim-f0">
+              <span class="fi-anim-label">Organisation type</span>
+              <div class="fi-anim-value"><span id="anim-v0"></span><span class="fi-anim-cursor" id="anim-c0"></span></div>
+            </div>
+            <div class="fi-anim-field" id="anim-f1">
+              <span class="fi-anim-label">Sector</span>
+              <div class="fi-anim-value"><span id="anim-v1"></span><span class="fi-anim-cursor" id="anim-c1"></span></div>
+            </div>
+            <div class="fi-anim-field" id="anim-f2">
+              <span class="fi-anim-label">Council area</span>
+              <div class="fi-anim-value"><span id="anim-v2"></span><span class="fi-anim-cursor" id="anim-c2"></span></div>
+            </div>
+            <div class="fi-anim-field" id="anim-f3">
+              <span class="fi-anim-label">Funding ask</span>
+              <div class="fi-anim-value"><span id="anim-v3"></span><span class="fi-anim-cursor" id="anim-c3"></span></div>
+            </div>
           </div>
-          <div class="fi-preview-result">
-            <span class="fi-preview-big">23</span>
+          <div class="fi-anim-btn" id="anim-btn">Check my matches &rarr;</div>
+          <div class="fi-preview-result" id="anim-result">
+            <span class="fi-preview-big" id="anim-count">0</span>
             <span class="fi-preview-big-label">potential funding matches</span>
           </div>
-          <p class="fi-preview-section-label">Including</p>
-          <div class="fi-preview-fund">
-            <span class="fi-preview-fund-dot"></span>DfC Community Support Grant
-          </div>
-          <div class="fi-preview-fund">
-            <span class="fi-preview-fund-dot"></span>Community Foundation NI
-          </div>
-          <div class="fi-preview-fund">
-            <span class="fi-preview-fund-dot"></span>CFNI Development Fund
+          <div id="anim-funds">
+            <p class="fi-preview-section-label">Including</p>
+            <div class="fi-preview-fund" id="anim-fund0"><span class="fi-preview-fund-dot"></span><span id="anim-fn0"></span></div>
+            <div class="fi-preview-fund" id="anim-fund1"><span class="fi-preview-fund-dot"></span><span id="anim-fn1"></span></div>
+            <div class="fi-preview-fund" id="anim-fund2"><span class="fi-preview-fund-dot"></span><span id="anim-fn2"></span></div>
           </div>
         </div>
       </div>
@@ -1308,7 +1364,7 @@ function toggleFaq(btn) {
   }
 }
 
-/* Funding Intelligence — animated counters + live stats */
+/* ── FUNDING INTELLIGENCE: STAT COUNTERS + LIVE DATA ── */
 var fiVisible = false;
 var fiOpenVal = null;
 
@@ -1347,6 +1403,148 @@ fetch('https://api.mastoras.uk/digest')
     if (fiVisible) { countUp(el, n, '', 1200); } else { el.textContent = n; }
   })
   .catch(function() {});
+
+/* ── PREVIEW CARD ANIMATION ── */
+(function() {
+  var examples = [
+    {
+      fields: ['Social Enterprise', 'Community & Social', 'Belfast', '£15,000'],
+      count: 23,
+      funds: ['DfC Community Support Grant', 'Community Foundation NI', 'CFNI Development Fund']
+    },
+    {
+      fields: ['Charity / VCSE', 'Arts & Culture', 'Derry City & Strabane', '£8,500'],
+      count: 14,
+      funds: ['Arts Council NI', 'DfC Voluntary Arts Fund', 'Community Foundation NI']
+    },
+    {
+      fields: ['SME', 'Digital & Technology', 'Mid and East Antrim', '£50,000'],
+      count: 31,
+      funds: ['Invest NI Digital Boost', 'InterTradeIreland Elevate', 'UK Shared Prosperity Fund']
+    }
+  ];
+  var exIdx = 0;
+
+  function g(id) { return document.getElementById(id); }
+
+  function resetCard() {
+    for (var i = 0; i < 4; i++) {
+      var f = g('anim-f' + i), v = g('anim-v' + i), c = g('anim-c' + i);
+      if (f) f.className = 'fi-anim-field';
+      if (v) v.textContent = '';
+      if (c) c.className = 'fi-anim-cursor';
+    }
+    var btn = g('anim-btn');
+    if (btn) btn.className = 'fi-anim-btn';
+    var res = g('anim-result');
+    if (res) res.className = 'fi-preview-result';
+    var funds = g('anim-funds');
+    if (funds) funds.className = '';
+    for (var j = 0; j < 3; j++) {
+      var fd = g('anim-fund' + j);
+      if (fd) fd.className = 'fi-preview-fund';
+      var fn = g('anim-fn' + j);
+      if (fn) fn.textContent = '';
+    }
+    var cnt = g('anim-count');
+    if (cnt) cnt.textContent = '0';
+  }
+
+  function typeField(idx, text, done) {
+    var f = g('anim-f' + idx), v = g('anim-v' + idx), c = g('anim-c' + idx);
+    if (!f || !v || !c) { done && done(); return; }
+    f.className = 'fi-anim-field fi-active';
+    c.className = 'fi-anim-cursor fi-blink';
+    var i = 0;
+    var speed = Math.max(38, Math.min(65, 480 / text.length));
+    function tick() {
+      if (i < text.length) {
+        v.textContent += text[i++];
+        setTimeout(tick, speed);
+      } else {
+        c.className = 'fi-anim-cursor';
+        f.className = 'fi-anim-field fi-done';
+        setTimeout(done, 180);
+      }
+    }
+    setTimeout(tick, 120);
+  }
+
+  function animateCount(el, target) {
+    var t0 = performance.now();
+    function step(now) {
+      var p = Math.min((now - t0) / 900, 1);
+      el.textContent = Math.floor((1 - Math.pow(1 - p, 3)) * target);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function runNext() {
+    var ex = examples[exIdx % examples.length];
+    exIdx++;
+
+    for (var j = 0; j < 3; j++) {
+      var fn = g('anim-fn' + j);
+      if (fn) fn.textContent = ex.funds[j] || '';
+    }
+
+    resetCard();
+
+    typeField(0, ex.fields[0], function() {
+      typeField(1, ex.fields[1], function() {
+        typeField(2, ex.fields[2], function() {
+          typeField(3, ex.fields[3], function() {
+
+            var btn = g('anim-btn');
+            if (btn) btn.className = 'fi-anim-btn fi-ready';
+
+            setTimeout(function() {
+              if (btn) btn.className = 'fi-anim-btn fi-ready fi-pressed';
+              setTimeout(function() {
+                if (btn) btn.className = 'fi-anim-btn fi-ready';
+
+                setTimeout(function() {
+                  var res = g('anim-result');
+                  if (res) res.className = 'fi-preview-result fi-show';
+                  var cnt = g('anim-count');
+                  if (cnt) animateCount(cnt, ex.count);
+
+                  setTimeout(function() {
+                    var funds = g('anim-funds');
+                    if (funds) funds.className = 'fi-show';
+                    for (var k = 0; k < 3; k++) {
+                      (function(k) {
+                        setTimeout(function() {
+                          var fd = g('anim-fund' + k);
+                          if (fd) fd.className = 'fi-preview-fund fi-show';
+                        }, k * 200);
+                      }(k));
+                    }
+                    setTimeout(runNext, 3800);
+                  }, 650);
+                }, 380);
+              }, 140);
+            }, 550);
+
+          });
+        });
+      });
+    });
+  }
+
+  var started = false;
+  var cardObs = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting && !started) {
+      started = true;
+      setTimeout(runNext, 400);
+      cardObs.disconnect();
+    }
+  }, { threshold: 0.15 });
+
+  var card = g('fi-preview-card');
+  if (card) cardObs.observe(card);
+}());
 </script>
 
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
