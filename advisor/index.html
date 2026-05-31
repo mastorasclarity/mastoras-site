@@ -432,6 +432,38 @@
       .crm-track-table .crm-amount-input { width: 70px; }
     }
 
+    /* ── ADMIN ── */
+    .admin-section {
+      display: none; padding: 48px 0;
+      border-top: 1px solid var(--rule);
+    }
+    .admin-section h2 { font-size: 1.2rem; margin-bottom: 6px; }
+    .admin-section .sub { font-size: 14px; color: #888; margin-bottom: 24px; }
+    .admin-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .admin-card {
+      background: var(--white); border: 1px solid var(--rule);
+      border-radius: 6px; padding: 20px;
+    }
+    .admin-card h3 { font-size: 0.95rem; color: var(--slate); margin-bottom: 6px; }
+    .admin-card p { font-size: 13px; color: #888; line-height: 1.5; margin-bottom: 16px; }
+    .btn-admin {
+      width: 100%; padding: 10px; background: var(--white);
+      border: 1px solid var(--teal); border-radius: 5px; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+      color: var(--teal); transition: all 0.15s;
+    }
+    .btn-admin:hover:not(:disabled) { background: var(--teal); color: var(--white); }
+    .btn-admin:disabled { opacity: 0.55; cursor: not-allowed; }
+    .admin-result {
+      font-size: 13px; margin-top: 12px; min-height: 18px;
+      line-height: 1.45; color: var(--graphite);
+    }
+    .admin-result.ok   { color: var(--teal); }
+    .admin-result.err  { color: var(--red); }
+
     /* ── FOOTER ── */
     footer {
       background: var(--white); border-top: 1px solid var(--rule); padding: 36px 0;
@@ -755,6 +787,38 @@
   </div>
 </section>
 
+<!-- ── ADMIN ── -->
+<section class="admin-section" id="admin-section">
+  <div class="wrap">
+    <h2>Admin</h2>
+    <p class="sub">Manually trigger the background jobs that normally run on a schedule.</p>
+    <div class="admin-grid">
+
+      <div class="admin-card">
+        <h3>Follow-up Reminders</h3>
+        <p>Check for reports at 30/60/90-day milestones with no tracking, and email reminders. Runs daily at 07:00 UTC.</p>
+        <button type="button" class="btn-admin" id="btn-followup" onclick="runFollowup()">Run now</button>
+        <div class="admin-result" id="result-followup"></div>
+      </div>
+
+      <div class="admin-card">
+        <h3>Weekly Monitor</h3>
+        <p>Scrape InvestNI, DAERA, DfC and CFNI for fund changes. Runs Mondays at 08:00 UTC.</p>
+        <button type="button" class="btn-admin" id="btn-monitor" onclick="runMonitor()">Run now</button>
+        <div class="admin-result" id="result-monitor"></div>
+      </div>
+
+      <div class="admin-card">
+        <h3>Funding Radar</h3>
+        <p>Annotate funds with seasonal opening patterns. Runs on the 1st of each month at 09:00 UTC.</p>
+        <button type="button" class="btn-admin" id="btn-radar" onclick="runRadar()">Run now</button>
+        <div class="admin-result" id="result-radar"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ── FOOTER ── -->
 <footer>
   <div class="wrap">
@@ -787,8 +851,14 @@
       showApiKeyModal();
     } else {
       loadPreviousReports();
+      showAdminSection();
     }
   });
+
+  function showAdminSection() {
+    var el = document.getElementById('admin-section');
+    if (el) el.style.display = 'block';
+  }
 
   /* ── API KEY MODAL ── */
   function showApiKeyModal() {
@@ -803,6 +873,7 @@
     localStorage.setItem('mastoras_api_key', key);
     document.getElementById('api-key-modal').style.display = 'none';
     loadPreviousReports();
+    showAdminSection();
   }
 
   document.getElementById('api-key-input').addEventListener('keydown', function (e) {
@@ -1327,6 +1398,50 @@
   function escHtml(str) {
     if (!str) return '';
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── ADMIN ACTIONS ── */
+  function _adminRun(endpoint, btnId, resultId, runningMsg, doneFn) {
+    var btn = document.getElementById(btnId);
+    var res = document.getElementById(resultId);
+    btn.disabled = true;
+    res.className = 'admin-result';
+    res.textContent = runningMsg;
+    fetch(API + endpoint, {
+      method: 'POST',
+      headers: { 'X-API-Key': state.apiKey }
+    })
+    .then(function (r) {
+      if (!r.ok) throw new Error('Error ' + r.status);
+      return r.json();
+    })
+    .then(function (data) {
+      res.className = 'admin-result ok';
+      res.textContent = doneFn(data);
+    })
+    .catch(function (err) {
+      res.className = 'admin-result err';
+      res.textContent = err.message + ' — try again.';
+    })
+    .finally(function () { btn.disabled = false; });
+  }
+
+  function runFollowup() {
+    _adminRun('/admin/run-followup-reminders', 'btn-followup', 'result-followup',
+      'Checking reports…',
+      function (d) { return d.message || ('Done — ' + (d.reminders_sent || 0) + ' sent.'); });
+  }
+
+  function runMonitor() {
+    _adminRun('/admin/run-monitor', 'btn-monitor', 'result-monitor',
+      'Starting monitor…',
+      function (d) { return (d.status || 'Started.') + ' Check your email and the Updates list shortly.'; });
+  }
+
+  function runRadar() {
+    _adminRun('/admin/run-radar', 'btn-radar', 'result-radar',
+      'Starting radar…',
+      function (d) { return d.status || 'Started.'; });
   }
 
   /* ── MOBILE NAV ── */
