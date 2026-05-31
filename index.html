@@ -455,6 +455,80 @@
       line-height: 1.7;
     }
 
+    /* ── FUNDING INTELLIGENCE ── */
+    #funding-intelligence { background: var(--slate); }
+
+    .fi-eyebrow {
+      display: inline-block;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--brass);
+      background: rgba(176,141,87,0.15);
+      padding: 4px 10px; border-radius: 3px;
+      margin-bottom: 24px;
+    }
+
+    .fi-heading {
+      font-size: clamp(1.5em, 3vw, 2.2em);
+      color: #fff;
+      max-width: 660px;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .fi-sub {
+      font-size: 15.5px;
+      color: rgba(255,255,255,0.68);
+      max-width: 580px;
+      line-height: 1.8;
+      margin-bottom: 52px;
+    }
+
+    .fi-stats {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 0;
+      max-width: 520px;
+      margin-bottom: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .fi-stat { padding-right: 40px; }
+
+    .fi-stat-num {
+      display: block;
+      font-family: 'Merriweather', serif;
+      font-size: 2.4em; font-weight: 700;
+      color: var(--brass);
+      line-height: 1; margin-bottom: 8px;
+    }
+
+    .fi-stat-label {
+      display: block;
+      font-size: 11.5px; font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.1em; line-height: 1.5;
+    }
+
+    .fi-ctas { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+
+    .fi-link {
+      color: rgba(255,255,255,0.65);
+      font-size: 15px; font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: rgba(255,255,255,0.2);
+    }
+    .fi-link:hover { color: #fff; text-decoration-color: rgba(255,255,255,0.55); }
+
+    .fi-note {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      margin-top: 18px;
+    }
+
     /* ── SECONDARY SERVICES TOGGLE ── */
     .svc-secondary-toggle {
       background: none;
@@ -757,8 +831,7 @@
         <a href="#how-it-works">How it works</a>
         <a href="#about">About</a>
         <a href="/blog">Blog</a>
-        <a href="/funding-digest/">Funding Digest</a>
-        <a href="/funding-check/">Funding Check</a>
+        <a href="#funding-intelligence">NI Funding</a>
         <a href="https://calendly.com/garynicholl1515/20min" target="_blank" rel="noopener" class="nav-cta">Book a Call</a>
       </nav>
       <button class="hamburger" onclick="toggleMobileNav()" aria-label="Open navigation menu" aria-expanded="false">
@@ -771,8 +844,7 @@
     <a href="#how-it-works" onclick="closeMobileNav()">How it works</a>
     <a href="#about" onclick="closeMobileNav()">About</a>
     <a href="/blog" onclick="closeMobileNav()">Blog</a>
-    <a href="/funding-digest/" onclick="closeMobileNav()">Funding Digest</a>
-    <a href="/funding-check/" onclick="closeMobileNav()">Funding Check</a>
+    <a href="#funding-intelligence" onclick="closeMobileNav()">NI Funding</a>
     <a href="#contact" onclick="closeMobileNav()">Contact</a>
     <a href="https://calendly.com/garynicholl1515/20min" target="_blank" rel="noopener" style="color:var(--teal);font-weight:600;">Book a Call →</a>
   </div>
@@ -843,6 +915,34 @@
   </div>
 </section>
 
+<!-- ── FUNDING INTELLIGENCE ── -->
+<section id="funding-intelligence">
+  <div class="wrap">
+    <span class="fi-eyebrow">NI Funding Intelligence</span>
+    <h2 class="fi-heading">The NI funding landscape.<br>Live. Tracked weekly.</h2>
+    <p class="fi-sub">Most consultants tell you funding is competitive. Mástoras tracks the landscape in real time — 160+ NI and all-island schemes, updated every week. What's open, what's closing, and what actually fits your profile.</p>
+    <div class="fi-stats">
+      <div class="fi-stat">
+        <span class="fi-stat-num">160+</span>
+        <span class="fi-stat-label">Schemes tracked</span>
+      </div>
+      <div class="fi-stat">
+        <span class="fi-stat-num" id="fi-open">—</span>
+        <span class="fi-stat-label">Open right now</span>
+      </div>
+      <div class="fi-stat">
+        <span class="fi-stat-num">Weekly</span>
+        <span class="fi-stat-label">Automatic updates</span>
+      </div>
+    </div>
+    <div class="fi-ctas">
+      <a href="/funding-check/" class="btn-primary">Check how many schemes match your profile &rarr;</a>
+      <a href="/funding-digest/" class="fi-link">Browse the monthly digest &rarr;</a>
+    </div>
+    <p class="fi-note">Free. Instant. No sign-up required.</p>
+  </div>
+</section>
+
 <hr class="rule">
 
 <!-- ── WHY PEOPLE COME ── -->
@@ -862,6 +962,7 @@
       <div class="why-card">
         <h3>Their funding case is real but their application sounds like everyone else's</h3>
         <p>The project is genuine. But the application reads like it was written for a committee, not a person. Funders don't fund projects — they fund narratives that make sense of projects.</p>
+        <p style="margin-top:14px;font-size:13.5px;"><a href="/funding-check/" style="color:var(--teal);font-weight:600;text-decoration:none;">Check what schemes are available for your profile &rarr;</a></p>
       </div>
     </div>
   </div>
@@ -1011,6 +1112,7 @@
             <option value="grant-reframe">Grant Reframe</option>
             <option value="funding-roadmap">Funding Roadmap</option>
             <option value="impact-governance">Impact &amp; Governance Pack</option>
+            <option value="funding-match-report">Funding Match Report</option>
             <option value="not-sure">Not sure yet</option>
           </select>
         </div>
@@ -1072,6 +1174,16 @@ function toggleFaq(btn) {
     btn.classList.add('active');
   }
 }
+
+/* Live funding stats */
+fetch('https://api.mastoras.uk/digest')
+  .then(function(r) { return r.ok ? r.json() : null; })
+  .then(function(d) {
+    if (!d || !d.stats) return;
+    var el = document.getElementById('fi-open');
+    if (el) el.textContent = d.stats.total_open || '—';
+  })
+  .catch(function() {});
 </script>
 
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
