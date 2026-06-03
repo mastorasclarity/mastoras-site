@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mástoras HQ</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --slate:#2E3440; --linen:#F4F1EC; --brass:#B08D57; --teal:#0F595E;
+      --graphite:#222222; --white:#fff; --rule:#e2e8f0; --red:#c0392b; --green:#1a7a3f;
+    }
+    body {
+      font-family:'DM Sans',-apple-system,sans-serif; font-size:16px; line-height:1.6;
+      color:var(--graphite); background:var(--linen); -webkit-font-smoothing:antialiased;
+    }
+    h1,h2,h3,h4 { font-family:'Merriweather',Georgia,serif; color:var(--slate); line-height:1.25; }
+    a { color:var(--teal); }
+    .wrap { max-width:1100px; margin:0 auto; padding:0 32px; }
+
+    /* HEADER */
+    header { background:var(--white); border-bottom:1px solid var(--rule); position:sticky; top:0; z-index:200; }
+    .header-inner { display:flex; justify-content:space-between; align-items:center; height:72px; }
+    .wordmark { text-decoration:none; display:flex; align-items:center; gap:10px; }
+    .wordmark img { height:46px; width:auto; }
+    .wordmark .hq-tag {
+      font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase;
+      color:var(--brass); background:rgba(176,141,87,0.13); padding:4px 9px; border-radius:3px;
+    }
+    .nav-links { display:flex; align-items:center; gap:24px; }
+    .nav-links a { color:var(--graphite); text-decoration:none; font-size:14px; font-weight:500; }
+    .nav-links a:hover { color:var(--teal); }
+
+    /* API KEY MODAL */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(46,52,64,0.82); z-index:1000;
+      display:flex; align-items:center; justify-content:center; padding:24px;
+    }
+    .modal-box { background:var(--white); max-width:440px; width:100%; padding:36px; border-top:3px solid var(--teal); }
+    .modal-box h2 { font-size:1.15rem; margin-bottom:10px; }
+    .modal-box p { font-size:14px; color:#666; margin-bottom:20px; }
+    .modal-input { width:100%; padding:11px 14px; border:1px solid var(--rule); border-radius:4px; font-family:inherit; font-size:15px; margin-bottom:14px; }
+    .modal-input:focus { outline:none; border-color:var(--teal); }
+
+    /* HERO */
+    .page-hero { background:var(--slate); color:var(--white); padding:40px 0 36px; }
+    .page-hero h1 { color:var(--white); font-size:clamp(1.5rem,3vw,2rem); margin-bottom:6px; }
+    .page-hero p { color:rgba(255,255,255,0.6); font-size:15px; }
+
+    /* STATS BAR */
+    .stats { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:6px; overflow:hidden; margin:28px 0; }
+    .stat { background:var(--white); padding:16px 18px; text-align:center; }
+    .stat-num { font-family:'Merriweather',serif; font-size:1.7rem; font-weight:700; color:var(--brass); display:block; line-height:1; }
+    .stat-label { font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.07em; color:#aaa; margin-top:6px; display:block; }
+
+    /* CONTROLS */
+    .controls { display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+    .search-input { flex:1; min-width:200px; padding:10px 14px; border:1px solid var(--rule); border-radius:5px; font-family:inherit; font-size:14px; }
+    .search-input:focus { outline:none; border-color:var(--teal); }
+    .filter-select { padding:10px 14px; border:1px solid var(--rule); border-radius:5px; font-family:inherit; font-size:14px; background:var(--white); cursor:pointer; }
+
+    /* TABLE */
+    .table-wrap { background:var(--white); border:1px solid var(--rule); border-radius:6px; overflow:hidden; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th { background:var(--slate); color:#fff; text-align:left; padding:11px 16px; font-weight:600; font-size:11.5px; letter-spacing:0.04em; text-transform:uppercase; }
+    td { padding:12px 16px; border-bottom:1px solid var(--rule); vertical-align:middle; }
+    tr:last-child td { border-bottom:none; }
+    tbody tr { cursor:pointer; transition:background 0.12s; }
+    tbody tr:hover { background:var(--linen); }
+    .client-name { font-weight:600; color:var(--slate); }
+    .client-org { font-size:12.5px; color:#888; }
+
+    .badge { display:inline-block; padding:3px 9px; border-radius:3px; font-size:10.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; white-space:nowrap; }
+    .badge-source { background:var(--linen); color:var(--slate); }
+    .badge-lead        { background:#eef2f7; color:#516072; }
+    .badge-call        { background:#e7eff7; color:#2c5d8f; }
+    .badge-active      { background:#fdf3e3; color:#9a7320; }
+    .badge-delivered   { background:#e6f3ec; color:#1a7a3f; }
+    .badge-closed      { background:#f1f1f1; color:#777; }
+    .badge-won         { background:#e6f3ec; color:#1a7a3f; }
+    .badge-lost        { background:#fbeeee; color:#c0392b; }
+    .badge-nofit       { background:#f1f1f1; color:#999; }
+
+    .empty { text-align:center; padding:56px 24px; color:#aaa; font-size:15px; }
+    .loading { text-align:center; padding:56px 24px; color:#aaa; }
+
+    /* PROFILE VIEW */
+    #profile-view { display:none; padding-bottom:64px; }
+    .back-btn { background:none; border:none; color:var(--teal); font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; padding:0; margin:24px 0 16px; }
+    .back-btn:hover { text-decoration:underline; }
+    .profile-head { background:var(--white); border:1px solid var(--rule); border-top:3px solid var(--brass); border-radius:6px; padding:28px 32px; margin-bottom:20px; }
+    .profile-head h2 { font-size:1.4rem; margin-bottom:4px; }
+    .profile-org { font-size:15px; color:#777; margin-bottom:16px; }
+    .profile-meta { display:flex; gap:24px; flex-wrap:wrap; font-size:13.5px; color:#555; margin-bottom:20px; }
+    .profile-meta strong { color:var(--slate); font-weight:600; }
+    .profile-controls { display:flex; gap:16px; align-items:center; flex-wrap:wrap; padding-top:18px; border-top:1px solid var(--rule); }
+    .profile-controls label { font-size:12px; font-weight:600; color:#888; text-transform:uppercase; letter-spacing:0.06em; }
+    .status-select { padding:8px 12px; border:1px solid var(--rule); border-radius:5px; font-family:inherit; font-size:14px; background:var(--white); cursor:pointer; }
+    .run-report-link { margin-left:auto; background:var(--teal); color:#fff !important; padding:9px 18px; border-radius:5px; text-decoration:none; font-size:13.5px; font-weight:600; }
+    .run-report-link:hover { background:#0c4c50; }
+
+    .profile-grid { display:grid; grid-template-columns:1fr 320px; gap:20px; align-items:start; }
+    .panel { background:var(--white); border:1px solid var(--rule); border-radius:6px; padding:24px; margin-bottom:20px; }
+    .panel h3 { font-size:1rem; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+    .panel-label { font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--brass); margin-bottom:10px; }
+
+    .notes-area { width:100%; padding:12px 14px; border:1px solid var(--rule); border-radius:5px; font-family:inherit; font-size:14px; color:var(--graphite); resize:vertical; min-height:140px; line-height:1.6; }
+    .notes-area:focus { outline:none; border-color:var(--teal); }
+    .save-ind { font-size:12px; color:#aaa; margin-top:6px; min-height:16px; }
+    .save-ind.ok { color:var(--teal); }
+
+    .mini-stats { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:6px; overflow:hidden; margin-bottom:20px; }
+    .mini-stat { background:var(--white); padding:14px; text-align:center; }
+    .mini-stat .n { font-family:'Merriweather',serif; font-size:1.5rem; font-weight:700; color:var(--brass); display:block; }
+    .mini-stat .l { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:#aaa; margin-top:4px; display:block; }
+
+    .report-item { padding:14px 0; border-bottom:1px solid var(--rule); }
+    .report-item:last-child { border-bottom:none; }
+    .report-top { display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
+    .report-fund { font-weight:600; color:var(--slate); font-size:14px; }
+    .report-date { font-size:12px; color:#aaa; white-space:nowrap; }
+    .report-sub { font-size:12.5px; color:#888; margin-top:3px; }
+    .report-track { font-size:12px; color:var(--teal); margin-top:5px; }
+
+    .brick-item { padding:12px 0; border-bottom:1px solid var(--rule); font-size:13.5px; }
+    .brick-item:last-child { border-bottom:none; }
+    .brick-score { font-family:'Merriweather',serif; font-weight:700; color:var(--brass); }
+
+    .timeline-item { display:flex; gap:12px; padding:10px 0; font-size:13px; }
+    .timeline-dot { width:8px; height:8px; border-radius:50%; background:var(--brass); margin-top:6px; flex-shrink:0; }
+    .timeline-date { color:#aaa; font-size:12px; white-space:nowrap; }
+
+    footer { border-top:1px solid var(--rule); padding:28px 0; margin-top:40px; background:var(--white); }
+    .footer-inner { display:flex; justify-content:space-between; font-size:13px; color:#999; flex-wrap:wrap; gap:8px; }
+
+    @media (max-width:860px) {
+      .profile-grid { grid-template-columns:1fr; }
+      .stats { grid-template-columns:repeat(2,1fr); }
+      .nav-links a:not(.nav-home) { display:none; }
+    }
+    @media (max-width:600px) {
+      .wrap { padding:0 18px; }
+      .col-hide { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="api-key-modal" style="display:none;">
+  <div class="modal-box">
+    <h2>Mástoras HQ</h2>
+    <p>Enter your API key to access the client system. It's stored in your browser for future visits.</p>
+    <input type="password" class="modal-input" id="api-key-input" placeholder="Paste your API key" autocomplete="off">
+    <button type="button" class="run-report-link" style="margin:0;border:none;cursor:pointer;width:100%;padding:12px;" onclick="saveApiKey()">Continue →</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="wrap">
+    <div class="header-inner">
+      <a href="/hq/" class="wordmark" aria-label="Mástoras HQ">
+        <img src="../mastoras-logo.png" alt="Mástoras">
+        <span class="hq-tag">HQ</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/advisor/">Advisor</a>
+        <a href="https://mastoras.uk" class="nav-home">Main site</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="wrap">
+    <h1>Client HQ</h1>
+    <p>Every client, every report, every outcome — in one place.</p>
+  </div>
+</div>
+
+<!-- LIST VIEW -->
+<main class="wrap" id="list-view">
+  <div class="stats" id="stats">
+    <div class="stat"><span class="stat-num" id="s-clients">—</span><span class="stat-label">Clients</span></div>
+    <div class="stat"><span class="stat-num" id="s-active">—</span><span class="stat-label">Active</span></div>
+    <div class="stat"><span class="stat-num" id="s-reports">—</span><span class="stat-label">Reports</span></div>
+    <div class="stat"><span class="stat-num" id="s-approved">—</span><span class="stat-label">Approved</span></div>
+    <div class="stat"><span class="stat-num" id="s-value">—</span><span class="stat-label">Value awarded</span></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" class="search-input" id="search" placeholder="Search by name, organisation or email…" oninput="renderList()">
+    <select class="filter-select" id="status-filter" onchange="renderList()">
+      <option value="">All statuses</option>
+      <option value="Lead">Lead</option>
+      <option value="Clarity Call Booked">Clarity Call Booked</option>
+      <option value="Clarity Call Done">Clarity Call Done</option>
+      <option value="Active Engagement">Active Engagement</option>
+      <option value="Delivered">Delivered</option>
+      <option value="Closed — Won">Closed — Won</option>
+      <option value="Closed — Lost">Closed — Lost</option>
+      <option value="Not a Fit">Not a Fit</option>
+    </select>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Source</th>
+          <th>Status</th>
+          <th class="col-hide">Reports</th>
+          <th class="col-hide">BRICK</th>
+          <th class="col-hide">Last activity</th>
+        </tr>
+      </thead>
+      <tbody id="clients-tbody">
+        <tr><td colspan="6" class="loading">Loading clients…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<!-- PROFILE VIEW -->
+<main class="wrap" id="profile-view">
+  <button type="button" class="back-btn" onclick="showList()">← Back to all clients</button>
+  <div id="profile-content"></div>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>Mástoras HQ — internal client system</span>
+    <span>Structure → Story → Soul</span>
+  </div>
+</footer>
+
+<script>
+  var API = 'https://api.mastoras.uk';
+  var state = { apiKey: localStorage.getItem('mastoras_api_key') || '', clients: [], notesTimer: null };
+
+  /* ── INIT ── */
+  window.addEventListener('DOMContentLoaded', function () {
+    if (!state.apiKey) {
+      document.getElementById('api-key-modal').style.display = 'flex';
+    } else {
+      loadClients();
+    }
+  });
+
+  function saveApiKey() {
+    var k = document.getElementById('api-key-input').value.trim();
+    if (!k) return;
+    state.apiKey = k;
+    localStorage.setItem('mastoras_api_key', k);
+    document.getElementById('api-key-modal').style.display = 'none';
+    loadClients();
+  }
+  document.getElementById('api-key-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') saveApiKey();
+  });
+
+  function headers() { return { 'X-API-Key': state.apiKey, 'Content-Type': 'application/json' }; }
+
+  function escHtml(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+  }
+  function money(n) { return '£' + (Number(n)||0).toLocaleString('en-GB'); }
+
+  var STATUS_BADGE = {
+    'Lead':'badge-lead', 'Clarity Call Booked':'badge-call', 'Clarity Call Done':'badge-call',
+    'Active Engagement':'badge-active', 'Delivered':'badge-delivered',
+    'Closed — Won':'badge-won', 'Closed — Lost':'badge-lost', 'Not a Fit':'badge-nofit'
+  };
+  function statusBadge(s) {
+    var cls = STATUS_BADGE[s] || 'badge-closed';
+    return '<span class="badge ' + cls + '">' + escHtml(s || 'Lead') + '</span>';
+  }
+
+  /* ── LIST ── */
+  function loadClients() {
+    fetch(API + '/clients', { headers: headers() })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function (data) { state.clients = data || []; renderStats(); renderList(); })
+    .catch(function () {
+      document.getElementById('clients-tbody').innerHTML =
+        '<tr><td colspan="6" class="empty">Couldn\'t load clients. Check your API key and connection.</td></tr>';
+    });
+  }
+
+  function renderStats() {
+    var c = state.clients;
+    var active = c.filter(function (x) {
+      return ['Clarity Call Booked','Clarity Call Done','Active Engagement'].indexOf(x.status) !== -1;
+    }).length;
+    var reports = c.reduce(function (a,x) { return a + (x.report_count||0); }, 0);
+    var approved = c.reduce(function (a,x) { return a + (x.approved||0); }, 0);
+    var value = c.reduce(function (a,x) { return a + (x.value_awarded||0); }, 0);
+    document.getElementById('s-clients').textContent = c.length;
+    document.getElementById('s-active').textContent = active;
+    document.getElementById('s-reports').textContent = reports;
+    document.getElementById('s-approved').textContent = approved;
+    document.getElementById('s-value').textContent = money(value);
+  }
+
+  function renderList() {
+    var q = (document.getElementById('search').value || '').toLowerCase();
+    var sf = document.getElementById('status-filter').value;
+    var rows = state.clients.filter(function (c) {
+      var hay = ((c.name||'') + ' ' + (c.org_name||'') + ' ' + (c.email||'')).toLowerCase();
+      var okQ = !q || hay.indexOf(q) !== -1;
+      var okS = !sf || c.status === sf;
+      return okQ && okS;
+    });
+    var tb = document.getElementById('clients-tbody');
+    if (!rows.length) {
+      tb.innerHTML = '<tr><td colspan="6" class="empty">No clients yet. They\'ll appear here as reports, BRICK assessments and enquiries come in.</td></tr>';
+      return;
+    }
+    tb.innerHTML = rows.map(function (c) {
+      var nameLine = c.name ? escHtml(c.name) : (c.org_name ? escHtml(c.org_name) : '<em style="color:#bbb">No name</em>');
+      var orgLine = (c.name && c.org_name) ? '<div class="client-org">' + escHtml(c.org_name) + '</div>' : '';
+      var brick = (c.brick_score !== null && c.brick_score !== undefined) ? (c.brick_score + '/24') : '—';
+      return '<tr onclick="openClient(\'' + c.id + '\')">' +
+        '<td><span class="client-name">' + nameLine + '</span>' + orgLine +
+          (c.email ? '<div class="client-org">' + escHtml(c.email) + '</div>' : '') + '</td>' +
+        '<td><span class="badge badge-source">' + escHtml(c.source || '—') + '</span></td>' +
+        '<td>' + statusBadge(c.status) + '</td>' +
+        '<td class="col-hide">' + (c.report_count||0) + '</td>' +
+        '<td class="col-hide">' + brick + '</td>' +
+        '<td class="col-hide">' + fmtDate(c.last_activity) + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  /* ── PROFILE ── */
+  function showList() {
+    document.getElementById('profile-view').style.display = 'none';
+    document.getElementById('list-view').style.display = 'block';
+    document.querySelector('.stats').style.display = 'grid';
+    loadClients();
+    window.scrollTo(0,0);
+  }
+
+  function openClient(id) {
+    document.getElementById('list-view').style.display = 'none';
+    document.getElementById('profile-view').style.display = 'block';
+    document.getElementById('profile-content').innerHTML = '<p class="loading">Loading client…</p>';
+    window.scrollTo(0,0);
+    fetch(API + '/clients/' + id, { headers: headers() })
+    .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+    .then(function (data) { renderProfile(data); })
+    .catch(function () {
+      document.getElementById('profile-content').innerHTML = '<p class="empty">Couldn\'t load this client.</p>';
+    });
+  }
+
+  var STATUSES = ['Lead','Clarity Call Booked','Clarity Call Done','Active Engagement','Delivered','Closed — Won','Closed — Lost','Not a Fit'];
+
+  function renderProfile(data) {
+    var c = data.client;
+    var reports = data.reports || [];
+    var bricks = data.brick || [];
+    var stats = data.stats || {};
+
+    var statusOpts = STATUSES.map(function (s) {
+      return '<option value="' + escHtml(s) + '"' + (c.status === s ? ' selected' : '') + '>' + escHtml(s) + '</option>';
+    }).join('');
+
+    var metaBits = [];
+    if (c.email) metaBits.push('<span><strong>Email:</strong> ' + escHtml(c.email) + '</span>');
+    if (c.phone) metaBits.push('<span><strong>Phone:</strong> ' + escHtml(c.phone) + '</span>');
+    if (c.council_area) metaBits.push('<span><strong>Area:</strong> ' + escHtml(c.council_area) + '</span>');
+    metaBits.push('<span><strong>Source:</strong> ' + escHtml(c.source || '—') + '</span>');
+    metaBits.push('<span><strong>Added:</strong> ' + fmtDate(c.created_at) + '</span>');
+
+    var reportsHtml = reports.length ? reports.map(function (r) {
+      var t = r.application_tracking || {};
+      var applied = Object.keys(t).filter(function (k) { return t[k].applied; }).length;
+      var track = applied ? '<div class="report-track">' + applied + ' fund' + (applied!==1?'s':'') + ' tracked as applied</div>' : '';
+      return '<div class="report-item">' +
+        '<div class="report-top"><span class="report-fund">' + escHtml(r.top_fund || 'Report') + '</span>' +
+          '<span class="report-date">' + fmtDate(r.created_at) + '</span></div>' +
+        '<div class="report-sub">' + (r.total_matches||0) + ' matched schemes' +
+          (r.client_ref ? ' · ref: ' + escHtml(r.client_ref) : '') + '</div>' + track +
+      '</div>';
+    }).join('') : '<p style="color:#aaa;font-size:14px">No reports yet.</p>';
+
+    var bricksHtml = bricks.length ? bricks.map(function (b) {
+      return '<div class="brick-item"><span class="brick-score">' + (b.total_score!=null?b.total_score+'/24':'—') + '</span>' +
+        (b.score_band ? ' · ' + escHtml(b.score_band) : '') +
+        '<div style="color:#aaa;font-size:12px;margin-top:2px">' + fmtDate(b.created_at) + '</div></div>';
+    }).join('') : '<p style="color:#aaa;font-size:13px">No BRICK assessment.</p>';
+
+    // Timeline (reports + bricks + created), newest first
+    var events = [];
+    events.push({ d: c.created_at, t: 'Client record created (' + escHtml(c.source||'manual') + ')' });
+    reports.forEach(function (r) { events.push({ d: r.created_at, t: 'Funding report — ' + escHtml(r.top_fund || 'generated') }); });
+    bricks.forEach(function (b) { events.push({ d: b.created_at, t: 'BRICK assessment (' + (b.total_score!=null?b.total_score+'/24':'') + ')' }); });
+    events.sort(function (a,b) { return (b.d||'').localeCompare(a.d||''); });
+    var timelineHtml = events.map(function (e) {
+      return '<div class="timeline-item"><span class="timeline-dot"></span><div>' + e.t +
+        '<div class="timeline-date">' + fmtDate(e.d) + '</div></div></div>';
+    }).join('');
+
+    var displayName = c.name || c.org_name || 'Unnamed client';
+
+    document.getElementById('profile-content').innerHTML =
+      '<div class="profile-head">' +
+        '<h2>' + escHtml(displayName) + '</h2>' +
+        (c.org_name && c.name ? '<p class="profile-org">' + escHtml(c.org_name) + '</p>' : '') +
+        '<div class="profile-meta">' + metaBits.join('') + '</div>' +
+        '<div class="profile-controls">' +
+          '<label>Status</label>' +
+          '<select class="status-select" id="status-select" onchange="saveStatus(\'' + c.id + '\', this.value)">' + statusOpts + '</select>' +
+          '<a class="run-report-link" href="/advisor/">Run new report →</a>' +
+        '</div>' +
+      '</div>' +
+      '<div class="profile-grid">' +
+        '<div>' +
+          '<div class="panel"><h3>Client Notes</h3>' +
+            '<textarea class="notes-area" id="client-notes" placeholder="Running notes on this client — calls, decisions, follow-ups…" ' +
+              'oninput="scheduleNotes(\'' + c.id + '\')" onblur="saveNotes(\'' + c.id + '\')">' + escHtml(c.notes || '') + '</textarea>' +
+            '<div class="save-ind" id="notes-ind"></div>' +
+          '</div>' +
+          '<div class="panel"><h3>Funding Reports (' + reports.length + ')</h3>' + reportsHtml + '</div>' +
+        '</div>' +
+        '<div>' +
+          '<div class="mini-stats">' +
+            '<div class="mini-stat"><span class="n">' + (stats.report_count||0) + '</span><span class="l">Reports</span></div>' +
+            '<div class="mini-stat"><span class="n">' + (stats.applied||0) + '</span><span class="l">Applied</span></div>' +
+            '<div class="mini-stat"><span class="n">' + (stats.approved||0) + '</span><span class="l">Approved</span></div>' +
+            '<div class="mini-stat"><span class="n">' + money(stats.value_awarded||0) + '</span><span class="l">Awarded</span></div>' +
+          '</div>' +
+          '<div class="panel"><h3>BRICK</h3>' + bricksHtml + '</div>' +
+          '<div class="panel"><h3>Timeline</h3>' + timelineHtml + '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  /* ── SAVE ── */
+  function patchClient(id, body, onOk) {
+    fetch(API + '/clients/' + id, { method:'PATCH', headers: headers(), body: JSON.stringify(body) })
+    .then(function (r) { if (onOk) onOk(r.ok); })
+    .catch(function () { if (onOk) onOk(false); });
+  }
+  function saveStatus(id, status) { patchClient(id, { status: status }); }
+  function scheduleNotes(id) {
+    clearTimeout(state.notesTimer);
+    document.getElementById('notes-ind').textContent = '';
+    state.notesTimer = setTimeout(function () { saveNotes(id); }, 1500);
+  }
+  function saveNotes(id) {
+    clearTimeout(state.notesTimer);
+    var el = document.getElementById('client-notes'); if (!el) return;
+    var ind = document.getElementById('notes-ind');
+    if (ind) ind.textContent = 'Saving…';
+    patchClient(id, { notes: el.value }, function (ok) {
+      if (ind) { ind.textContent = ok ? 'Saved ✓' : 'Save failed'; ind.className = 'save-ind' + (ok ? ' ok' : ''); }
+    });
+  }
+</script>
+</body>
+</html>

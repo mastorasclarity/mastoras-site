@@ -476,16 +476,11 @@
       formData.set('subject', `BRICK Submission — ${name} — ${score}/24 (${band ? band.title : 'unscored'})`);
 
       try {
-        // Fire both in parallel
+        // Fire both in parallel — /brick stores the submission AND links it to a client (Mástoras HQ)
         const [sbRes, w3Res] = await Promise.all([
-          fetch(`${SUPABASE_URL}/rest/v1/brick_submissions`, {
+          fetch('https://api.mastoras.uk/brick', {
             method: 'POST',
-            headers: {
-              'apikey': SUPABASE_ANON,
-              'Authorization': `Bearer ${SUPABASE_ANON}`,
-              'Content-Type': 'application/json',
-              'Prefer': 'return=minimal'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(record)
           }),
           fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData })
