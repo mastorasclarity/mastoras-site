@@ -963,6 +963,16 @@
       }
     });
 
+    // Contact email is optional, but if provided it must look valid (it links to HQ).
+    var emailEl = document.getElementById('client_email');
+    var emailVal = emailEl ? emailEl.value.trim() : '';
+    if (emailVal && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(emailVal)) {
+      emailEl.classList.add('field-error');
+      valid = false;
+      document.getElementById('validation-msg').textContent = 'The contact email doesn\'t look right — please check it.';
+      return false;
+    }
+
     if (!valid) {
       document.getElementById('validation-msg').textContent = 'Please complete all required fields (marked *) before generating.';
     }

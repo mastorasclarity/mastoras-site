@@ -335,6 +335,7 @@
     return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
   }
   function money(n) { return '£' + (Number(n)||0).toLocaleString('en-GB'); }
+  function isValidEmail(e) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); }
 
   var STATUS_BADGE = {
     'Lead':'badge-lead', 'Clarity Call Booked':'badge-call', 'Clarity Call Done':'badge-call',
@@ -595,6 +596,7 @@
     var email = document.getElementById('cm-email').value.trim();
     var err = document.getElementById('cm-error');
     if (!name && !email) { err.textContent = 'Enter at least a name or email.'; err.style.display = 'block'; return; }
+    if (email && !isValidEmail(email)) { err.textContent = 'That email doesn\'t look right — please check it.'; err.style.display = 'block'; return; }
     var body = {
       name: name || null,
       email: email || null,

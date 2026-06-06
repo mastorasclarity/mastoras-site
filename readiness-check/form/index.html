@@ -437,6 +437,12 @@
         errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        errorEl.textContent = 'That email doesn\'t look right — please check it.';
+        errorEl.style.display = 'block';
+        errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
       errorEl.style.display = 'none';
 
       const score = getScore();
