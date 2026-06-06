@@ -464,6 +464,34 @@
     .admin-result.ok   { color: var(--teal); }
     .admin-result.err  { color: var(--red); }
 
+    .admin-reports { margin-top: 36px; }
+    .admin-report-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .admin-report-head h3 { font-size: 1rem; color: var(--slate); }
+    .btn-refresh { background: none; border: 1px solid var(--rule); border-radius: 5px; padding: 6px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--teal); cursor: pointer; }
+    .btn-refresh:hover { border-color: var(--teal); background: rgba(15,89,94,0.05); }
+    .admin-muted { font-size: 13px; color: #aaa; }
+    .run-card { background: var(--white); border: 1px solid var(--rule); border-radius: 6px; padding: 16px 18px; margin-bottom: 10px; }
+    .run-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+    .run-type { font-weight: 600; color: var(--slate); text-transform: capitalize; }
+    .run-when { font-size: 12px; color: #aaa; white-space: nowrap; }
+    .run-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 3px; }
+    .rs-complete { background: #e6f3ec; color: #1a7a3f; }
+    .rs-running  { background: #e7eff7; color: #2c5d8f; }
+    .rs-error    { background: #fbeeee; color: #c0392b; }
+    .run-counts { font-size: 13px; color: #555; line-height: 1.6; }
+    .run-counts .chip { display: inline-block; background: var(--linen); border-radius: 3px; padding: 2px 8px; margin: 2px 4px 2px 0; font-size: 12px; }
+    .run-flagged { margin-top: 8px; font-size: 12.5px; color: #777; }
+    .run-flagged strong { color: var(--slate); }
+    .change-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 13px; }
+    .change-item:last-child { border-bottom: none; }
+    .change-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 3px; white-space: nowrap; height: fit-content; }
+    .ct-new { background: #e6f3ec; color: #1a7a3f; }
+    .ct-updated { background: #fdf3e3; color: #9a7320; }
+    .ct-closed { background: #fbeeee; color: #c0392b; }
+    .ct-deadline_passed { background: #fdf3e3; color: #9a7320; }
+    .ct-link_dead { background: #fbeeee; color: #c0392b; }
+    .change-when { color: #aaa; font-size: 12px; white-space: nowrap; margin-left: auto; }
+
     /* ── FOOTER ── */
     footer {
       background: var(--white); border-top: 1px solid var(--rule); padding: 36px 0;
@@ -827,6 +855,22 @@
       </div>
 
     </div>
+
+    <div class="admin-reports">
+      <div class="admin-report-head">
+        <h3>Recent runs</h3>
+        <button type="button" class="btn-refresh" onclick="loadRuns()">↻ Refresh</button>
+      </div>
+      <div id="runs-list"><p class="admin-muted">Loading…</p></div>
+    </div>
+
+    <div class="admin-reports">
+      <div class="admin-report-head">
+        <h3>Recent changes</h3>
+        <button type="button" class="btn-refresh" onclick="loadChanges()">↻ Refresh</button>
+      </div>
+      <div id="changes-list"><p class="admin-muted">Loading…</p></div>
+    </div>
   </div>
 </section>
 
@@ -868,7 +912,7 @@
 
   function showAdminSection() {
     var el = document.getElementById('admin-section');
-    if (el) el.style.display = 'block';
+    if (el) { el.style.display = 'block'; loadRuns(); loadChanges(); }
   }
 
   /* ── API KEY MODAL ── */
@@ -1458,13 +1502,81 @@
   function runMonitor() {
     _adminRun('/admin/run-monitor', 'btn-monitor', 'result-monitor',
       'Starting monitor…',
-      function (d) { return (d.status || 'Started.') + ' Check your email and the Updates list shortly.'; });
+      function (d) { setTimeout(function () { loadRuns(); loadChanges(); }, 30000); return d.status || 'Started.'; });
   }
 
   function runRadar() {
     _adminRun('/admin/run-radar', 'btn-radar', 'result-radar',
       'Starting radar…',
-      function (d) { return d.status || 'Started.'; });
+      function (d) { setTimeout(function () { loadRuns(); }, 30000); return d.status || 'Started.'; });
+  }
+
+  /* ── ADMIN REPORTS ── */
+  function fmtWhen(iso) {
+    if (!iso) return '—';
+    var d = new Date(iso);
+    return d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ' ' +
+           d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+  }
+
+  function loadRuns() {
+    var el = document.getElementById('runs-list');
+    el.innerHTML = '<p class="admin-muted">Loading…</p>';
+    fetch(API + '/admin/runs?limit=8', { headers: { 'X-API-Key': state.apiKey } })
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (runs) {
+      if (!runs.length) { el.innerHTML = '<p class="admin-muted">No runs recorded yet.</p>'; return; }
+      el.innerHTML = runs.map(function (run) {
+        var c = run.counts || {}, d = run.detail || {};
+        var chips = '';
+        if (run.run_type === 'monitor') {
+          chips =
+            '<span class="chip">' + (c.new||0) + ' new</span>' +
+            '<span class="chip">' + (c.updated||0) + ' updated</span>' +
+            '<span class="chip">' + (c.closed||0) + ' closed</span>' +
+            '<span class="chip">' + (c.deadline_flagged||0) + ' deadline flags</span>' +
+            '<span class="chip">' + (c.links_dead||0) + ' dead links</span>';
+          var src = d.sources ? Object.keys(d.sources).map(function (k) { return k + ': ' + d.sources[k]; }).join(' · ') : '';
+          if (src) chips += '<div class="run-flagged">Scraped — ' + escHtml(src) + '</div>';
+          var flags = [];
+          (d.deadline_flagged||[]).forEach(function (f) { flags.push('Deadline passed: ' + escHtml(f.fund_name||f.fund_id)); });
+          (d.links_dead||[]).forEach(function (f) { flags.push('Dead link: ' + escHtml(f.fund_name||f.fund_id)); });
+          if (flags.length) chips += '<div class="run-flagged"><strong>Flagged for review:</strong><br>' + flags.join('<br>') + '</div>';
+        } else {
+          chips = '<span class="chip">' + (c.annotated||0) + ' funds annotated</span>' +
+                  '<span class="chip">' + (c.closed_analysed||0) + ' analysed</span>';
+        }
+        return '<div class="run-card">' +
+          '<div class="run-top"><span class="run-type">' + escHtml(run.run_type) + '</span>' +
+            '<span class="run-status rs-' + escHtml(run.status) + '">' + escHtml(run.status) + '</span>' +
+            '<span class="run-when">' + fmtWhen(run.started_at) + '</span></div>' +
+          (run.status === 'error' ? '<div class="run-counts" style="color:var(--red)">' + escHtml(run.error||'error') + '</div>'
+                                  : '<div class="run-counts">' + chips + '</div>') +
+        '</div>';
+      }).join('');
+    })
+    .catch(function () { el.innerHTML = '<p class="admin-muted">Could not load runs.</p>'; });
+  }
+
+  function loadChanges() {
+    var el = document.getElementById('changes-list');
+    el.innerHTML = '<p class="admin-muted">Loading…</p>';
+    fetch(API + '/updates?limit=20', { headers: { 'X-API-Key': state.apiKey } })
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (rows) {
+      if (!rows.length) { el.innerHTML = '<p class="admin-muted">No changes logged yet.</p>'; return; }
+      el.innerHTML = rows.map(function (u) {
+        var nv = u.new_value || {};
+        var label = nv.fund_name || u.fund_id || '';
+        var note = nv.note || '';
+        return '<div class="change-item">' +
+          '<span class="change-type ct-' + escHtml(u.change_type) + '">' + escHtml((u.change_type||'').replace('_',' ')) + '</span>' +
+          '<span>' + escHtml(label) + (note ? ' — <span style="color:#999">' + escHtml(note) + '</span>' : '') + '</span>' +
+          '<span class="change-when">' + fmtWhen(u.timestamp) + '</span>' +
+        '</div>';
+      }).join('');
+    })
+    .catch(function () { el.innerHTML = '<p class="admin-muted">Could not load changes.</p>'; });
   }
 
   /* ── MOBILE NAV ── */
