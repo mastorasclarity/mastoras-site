@@ -492,6 +492,23 @@
     .ct-link_dead { background: #fbeeee; color: #c0392b; }
     .change-when { color: #aaa; font-size: 12px; white-space: nowrap; margin-left: auto; }
 
+    /* REVIEW QUEUE */
+    .flag-card { background:var(--white); border:1px solid var(--rule); border-left:3px solid var(--amber); border-radius:6px; padding:14px 16px; margin-bottom:10px; }
+    .flag-card.dead { border-left-color:var(--red); }
+    .flag-top { display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+    .flag-name { font-weight:600; color:var(--slate); font-size:14px; }
+    .flag-type { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; padding:2px 7px; border-radius:3px; white-space:nowrap; }
+    .ft-link_dead { background:#fbeeee; color:#c0392b; }
+    .ft-deadline_passed { background:#fdf3e3; color:#9a7320; }
+    .flag-meta { font-size:12px; color:#888; margin:3px 0 10px; word-break:break-all; }
+    .flag-meta a { color:var(--teal); }
+    .flag-actions { display:flex; gap:8px; flex-wrap:wrap; }
+    .flag-btn { border:1px solid var(--rule); background:var(--white); border-radius:5px; padding:6px 12px; font-family:'DM Sans',sans-serif; font-size:12.5px; font-weight:600; cursor:pointer; }
+    .flag-btn.fix { color:var(--teal); } .flag-btn.fix:hover { border-color:var(--teal); background:rgba(15,89,94,0.05); }
+    .flag-btn.closebtn { color:#9a7320; } .flag-btn.closebtn:hover { border-color:#9a7320; background:#fdf3e3; }
+    .flag-btn.dismiss { color:#888; } .flag-btn.dismiss:hover { border-color:#888; background:var(--linen); }
+    .flag-empty { font-size:13px; color:var(--green); padding:8px 0; }
+
     /* ── FOOTER ── */
     footer {
       background: var(--white); border-top: 1px solid var(--rule); padding: 36px 0;
@@ -858,6 +875,14 @@
 
     <div class="admin-reports">
       <div class="admin-report-head">
+        <h3>Flagged for review</h3>
+        <button type="button" class="btn-refresh" onclick="loadFlags()">↻ Refresh</button>
+      </div>
+      <div id="flags-list"><p class="admin-muted">Loading…</p></div>
+    </div>
+
+    <div class="admin-reports">
+      <div class="admin-report-head">
         <h3>Recent runs</h3>
         <button type="button" class="btn-refresh" onclick="loadRuns()">↻ Refresh</button>
       </div>
@@ -912,7 +937,7 @@
 
   function showAdminSection() {
     var el = document.getElementById('admin-section');
-    if (el) { el.style.display = 'block'; loadRuns(); loadChanges(); }
+    if (el) { el.style.display = 'block'; loadFlags(); loadRuns(); loadChanges(); }
   }
 
   /* ── API KEY MODAL ── */
@@ -1577,6 +1602,55 @@
       }).join('');
     })
     .catch(function () { el.innerHTML = '<p class="admin-muted">Could not load changes.</p>'; });
+  }
+
+  /* ── REVIEW QUEUE ── */
+  function loadFlags() {
+    var el = document.getElementById('flags-list');
+    el.innerHTML = '<p class="admin-muted">Loading…</p>';
+    fetch(API + '/admin/flags', { headers: { 'X-API-Key': state.apiKey } })
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (flags) {
+      if (!flags.length) { el.innerHTML = '<p class="flag-empty">✓ Nothing flagged — all funds look healthy.</p>'; return; }
+      el.innerHTML = flags.map(function (f) {
+        var dead = f.change_type === 'link_dead';
+        var typeLabel = dead ? 'dead link' : 'deadline passed';
+        var meta = dead
+          ? 'URL: <a href="' + escHtml(f.source_url||'') + '" target="_blank" rel="noopener">' + escHtml(f.source_url||'—') + '</a>'
+          : 'Deadline: ' + escHtml(f.deadline_date||'—') + (f.provider ? ' · ' + escHtml(f.provider) : '');
+        var fixBtn = dead
+          ? '<button type="button" class="flag-btn fix" onclick="flagFixUrl(\'' + escHtml(f.fund_id) + '\')">Fix URL</button>'
+          : '';
+        return '<div class="flag-card' + (dead?' dead':'') + '">' +
+          '<div class="flag-top"><span class="flag-name">' + escHtml(f.fund_name||f.fund_id) + '</span>' +
+            '<span class="flag-type ft-' + escHtml(f.change_type) + '">' + typeLabel + '</span></div>' +
+          '<div class="flag-meta">' + meta + '</div>' +
+          '<div class="flag-actions">' + fixBtn +
+            '<button type="button" class="flag-btn closebtn" onclick="flagAction(\'' + escHtml(f.fund_id) + '\',\'' + escHtml(f.change_type) + '\',\'close\')">Mark closed</button>' +
+            '<button type="button" class="flag-btn dismiss" onclick="flagAction(\'' + escHtml(f.fund_id) + '\',\'' + escHtml(f.change_type) + '\',\'dismiss\')">Dismiss</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    })
+    .catch(function () { el.innerHTML = '<p class="admin-muted">Could not load flags.</p>'; });
+  }
+
+  function flagAction(fundId, changeType, action, newUrl) {
+    var body = { fund_id: fundId, change_type: changeType, action: action };
+    if (newUrl) body.new_url = newUrl;
+    fetch(API + '/admin/flags/action', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': state.apiKey },
+      body: JSON.stringify(body)
+    })
+    .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+    .then(function () { loadFlags(); })
+    .catch(function () { alert('Action failed — try again.'); });
+  }
+
+  function flagFixUrl(fundId) {
+    var url = prompt('Enter the correct source URL for this fund:');
+    if (url && url.trim()) flagAction(fundId, 'link_dead', 'fix_url', url.trim());
   }
 
   /* ── MOBILE NAV ── */
